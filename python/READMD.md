@@ -179,3 +179,4 @@ sorted() : 작은 크기순으로 정렬시켜줌
 X.sort(reverse=True) : X 변수의 리스트를 내림차순으로 정렬시킴
 
 random(range(), x) : range()범위에 임의의 숫자 x개를 뽑음
+
