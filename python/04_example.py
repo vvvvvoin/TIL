@@ -26,5 +26,5 @@ print(phone_nums[0])
 
 # dictionary
 dict_nums = {"순남 시래기" : "02-456-8647", "양자강" : "02-468-8971", "20층" : "02-785-3843"}
-
 print(dict_nums["순남 시래기"])
+print(dict_nums.get)
