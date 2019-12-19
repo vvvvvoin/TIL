@@ -21,8 +21,15 @@ doc = bs(response, 'html.parser')
 
 result = doc.select('.ah_k')
 print(result)
+print(doc.select_one("#PM_ID_ct > div.header > div.section_navbar > div.area_hotkeyword.PM_CL_realtimeKeyword_base > div.ah_list.PM_CL_realtimeKeyword_list_base > ul:nth-child(5) > li.ah_item.ah_on > a > span.ah_k").text)
 
-search_url = "https://search.naver.com/search.naver?query="
-for i in range(5) :
-    webbrowser.open(search_url + result[i].text)
+# search_url = "https://search.naver.com/search.naver?query="
+# for i in range(5) :
+#     webbrowser.open(search_url + result[i].text)
+
+
+
+
+
+
 
