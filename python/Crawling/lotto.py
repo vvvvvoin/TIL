@@ -16,6 +16,7 @@ print(lotto)
 # print(lotto["drwtNo5"]) ## 데이터 값이 없으면 오류발생
 # print(lotto.get(["drwtNo5"])) ## 데이터 값이 없으면 none 반환
 
+
 winner = []
 for i in range(1, 7):
     winner.append(lotto.get(f"drwtNo{i}"))
