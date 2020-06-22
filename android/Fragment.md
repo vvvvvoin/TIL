@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
 #### 결과화면
 
-![프래그먼트 테스트](image/프래그먼트 테스트.jpg){: width="100" height="100"}
+![프래그먼트 테스트](image/프래그먼트 테스트.jpg)
 
 
 
