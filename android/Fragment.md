@@ -46,8 +46,6 @@ fragmentTransaction.commit();
 - 이후 Fragment에 대한 추가, 삭제, 교체, 애니메이션 작업을 추가후 commit()을 호출 후 Transaction을 마무리한다
 - 반드시 commit()을 호출해야 transaction 작업이 정상적으로 작동됨
 
-2. Fragment Transaction을 이용한 Fragment추가
-
 
 
 #### 전체적인 사용법
@@ -121,22 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
 #### 결과화면
 
-![프래그먼트 테스트](image/프래그먼트 테스트.jpg)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<img src="image/fragmentTest.jpg" alt="프래그먼트 테스트" style="zoom:50%;" />
 
 
 
