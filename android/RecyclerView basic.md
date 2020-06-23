@@ -138,7 +138,7 @@ public class ListItem extends RecyclerView.ViewHolder {
         return size;
     }
 ```
-
+<img src="image/recyclerView.jpg" alt="recyclerView" style="zoom:50%;" />
 
 
 #### viewType이란
