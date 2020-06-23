@@ -201,7 +201,7 @@ public class ListItem extends RecyclerView.ViewHolder {
 
 
 
-
+참고 : [https://thepassion.tistory.com/294](https://thepassion.tistory.com/294)
 
 
 
