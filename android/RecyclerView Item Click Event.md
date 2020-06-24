@@ -196,8 +196,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
 
-
 참고 : [https://thepassion.tistory.com/301](https://thepassion.tistory.com/301)
+
+다른예시 : [https://github.com/vvvvvoin/MC-project-android/blob/master/app/src/main/java/RecyclerViewAdapter/VerticalAdapter.java](https://github.com/vvvvvoin/MC-project-android/blob/master/app/src/main/java/RecyclerViewAdapter/VerticalAdapter.java)
 
 
 
