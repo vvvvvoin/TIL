@@ -46,14 +46,14 @@ public class Test {
 ```
 #### 3. lazy-init
 - ApplicationContext 를 이용한 컨테이너는 즉시 로딩방식으로 동작한다
-- 그런데 자주 사용하지 않는 어떤 <bean>은 메모리를 차지하고 시스템에 부담을 주낟
+- 그런데 자주 사용하지 않는 어떤 <bean>은 메모리를 차지하고 시스템에 부담을 줌
 - 이러한 <bean>을 사용되는 시점에 객체를 생성하도록 lazy-init 속성을 제공한다
 ```xml
 <bean id="test" class="com.test.cases.Test" lazy-init="true"/>
 ```
 #### 4. scope
 - 수많은 객체가 생성되는 중 하나만 생성돼도 상관없는 객체들이 존재한다.
-- 그렇기에 하나만 생성해도되는 객체이면 주소를 복사하여 다음과 같이 재사용할 수 있다.
+- 그렇기에 하나만 생성해도 되는 객체이면 주소를 복사하여 다음과 같이 재사용할 수 있다.
 ```java
 package com.test.cases;
 
