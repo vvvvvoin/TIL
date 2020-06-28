@@ -115,7 +115,7 @@ public class SamsumgTV implements TV{
 </bean>
 <bean id="sony" class="polymorphism.SonySpeaker"></bean>
 ```
-- <constructor-arg value="3000000">을 추가한다.
+- constructor-arg value="3000000" 을 추가한다.
 - 고정된 문자열이나 정수같은 기본형 데이터는 value 속성을 이용한다
 
 
