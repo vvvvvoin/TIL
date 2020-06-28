@@ -232,7 +232,7 @@ public class SamsumgTV implements TV{
 - Setter 인젝션을 설정할때 p 네임스페이스를 사용하면 좀더 효율적으로 의존성 주입이 가능
 - 다음과 같이 p 네임스페이스를 체크한다
 
-![p네임스페이스](image/p네임스페이스.jpg)
+![p네임스페이스](image/p네임스페이스.JPG)
 
 ```xml
 <bean id="tv" class="polymorphism.SamsumgTV" p:speaker-ref="sony" p:price="3000000"></bean>
