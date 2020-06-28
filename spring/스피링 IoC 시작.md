@@ -20,7 +20,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- test class -->
-	<bean id="test" class="com.test.case"></bean>
+	<bean id="test" class="com.test.cases"></bean>
 </beans>
 ```
 > ctrl + spaceBar를 이용하면 좀더 편리하게 사용가능
