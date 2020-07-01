@@ -73,7 +73,7 @@ public class LogAdvice {
 
 ```
 #### 어드바이스 동작 시점
-- [이전코드][https://github.com/vvvvvoin/TIL/blob/master/spring/AOP%20JointPoint%EC%99%80%20%EB%B0%94%EC%9D%B8%EB%93%9C%20%EB%B3%80%EC%88%98.md)를 어노테이션으로 변형
+- [이전코드](https://github.com/vvvvvoin/TIL/blob/master/spring/AOP%20JointPoint%EC%99%80%20%EB%B0%94%EC%9D%B8%EB%93%9C%20%EB%B3%80%EC%88%98.md)를 어노테이션으로 변형
 
 ##### Before 어드바이스
 
