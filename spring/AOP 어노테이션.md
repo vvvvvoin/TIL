@@ -129,7 +129,7 @@ public class AfterReturningAdvice {
 - 어노테이션 설정에서도 returning속성을 이용하여 바인드 변수를 지정할 수 있다.
 ```xml
 <aop:aspect ref="afterReturning">
-			<aop:after-returning method="afterLog" pointcut-ref="getPointcut" returning="returnObj"/>
+	<aop:after-returning method="afterLog" pointcut-ref="getPointcut" returning="returnObj"/>
 </aop:aspect>
 ```
 ##### After Throwing 어드바이스
@@ -161,7 +161,7 @@ public class AfterThrowingAdvice {
 - xml설정에서와 마찬가지로 throwing속성을 이용하여 바인드 변수를 지정할 수 있다.
 ```xml
 <aop:aspect ref="afterThrwing">
-			<aop:after-throwing pointcut-ref="allPointcut" method="exceptionLog" throwing="exceptObj"/>
+	<aop:after-throwing pointcut-ref="allPointcut" method="exceptionLog" throwing="exceptObj"/>
 </aop:aspect>
 ```
 ##### After 어드바이스
