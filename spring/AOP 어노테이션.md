@@ -64,7 +64,7 @@ public class LogAdvice {
 public class LogAdvice {
 	@Pointcut("execution(* com.springbook.biz..*Impl.*(..))")
 	public void allPointcut() {}	//포인트컷
-									//	+
+							//	+
 	@Before("allPointcut()")		//어드바이스
 	public void printLog() {
 		System.out.println("[공통로그] 비지니스 로직 수행 전 동작");
@@ -73,7 +73,7 @@ public class LogAdvice {
 
 ```
 #### 어드바이스 동작 시점
-- [이전코드]([https://github.com/vvvvvoin/TIL/blob/master/spring/AOP%20JointPoint%EC%99%80%20%EB%B0%94%EC%9D%B8%EB%93%9C%20%EB%B3%80%EC%88%98.md](https://github.com/vvvvvoin/TIL/blob/master/spring/AOP JointPoint와 바인드 변수.md))를 어노테이션으로 변형
+- [이전코드][https://github.com/vvvvvoin/TIL/blob/master/spring/AOP%20JointPoint%EC%99%80%20%EB%B0%94%EC%9D%B8%EB%93%9C%20%EB%B3%80%EC%88%98.md)를 어노테이션으로 변형
 
 ##### Before 어드바이스
 
