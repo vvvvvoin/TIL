@@ -232,7 +232,7 @@ else if (path.equals("/getBoardList.do")) {
 > 나머지 삭제, 수정 코드또한 proc.jsp에 로직을 DispatcherServlet의 분기마다 복사한다.
 
 
-![mvc](image/mvc.JPG)
+![mvc](image/MVC.JPG)
 
 
 - 먼저 model 기능의 vo, dao 클래스는 재사용 되었고, DispatcherServlet이라는 Controller 기능의 서블릿 클래스가 추가되었다.
