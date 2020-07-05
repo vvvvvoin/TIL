@@ -37,7 +37,7 @@ private void process(HttpServletRequest request, HttpServletResponse response) t
 - 이 문서에서는 Spring MVC를 적용하기 전에 Spring MVC와 동일한 구조의 프레임워크를 적용한다.
 
 
-![MVC프레임워크 구조](image/MVC프레임워크 구조.JPG)
+![MVC프레임워크 구조](image/MVC프레임워크 구조1.JPG)
 
 ### MVC 프레임워크 구현
 #### Controller 인터페이스 작성
