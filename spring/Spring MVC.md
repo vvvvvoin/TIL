@@ -3,7 +3,7 @@
 - 스프링 mvc는 [MVC프레임워크](https://github.com/vvvvvoin/TIL/blob/master/spring/MVC%20%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC.md)와 비슷한 구조를 가졌다.
 - 그래서 하나의 프레임워크만 잘 이해한다면 다른 프레임워크도 쉽게 이해할 수 있다.
 
-![Spring MVC구조.JPG](image/Spring MVC구조.JPG)
+![Spring MVC frame](image/SpringMVCFrame.JPG)
 - Spring MVC의 구조와 수행흐름이 [MVC프레임워크](https://github.com/vvvvvoin/TIL/blob/master/spring/MVC%20%ED%94%84%EB%A0%88%EC%9E%84%EC%9B%8C%ED%81%AC.md)에 적용된 Contoller 구조와 유사하다.
 - 다른 점은 Controller의 리턴타입이 Stirng이 아닌 ModelAndVIew로 바뀌었다.
 
@@ -239,7 +239,7 @@ public class GetBoardListController implements Controller {
 <bean id="getBoardList" class="com.springbook.view.board.GetBoardListController"></bean>
 ```
 
-![Spring MVC구조.JPG](image/Spring MVC구조.JPG)
+![Spring MVC frame](image/SpringMVCFrame.JPG)
 1. 클라이언트로부터 /getBoaardList.do 요청을 전송하면 DispatcherServlet이 요청을 받는다
 2. SimpleUrlHandlerMapping을 통해 요청을 처리할 GetBoardListContoller를 검색한다
 3. DispatcherServlet은 검색된 GetboardListController를 실행하여 요청을 처리한다.
