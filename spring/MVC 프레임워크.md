@@ -385,6 +385,7 @@ public class HandlerMapping {
 > 나머지 세부 글, 삭제, 수정도 구현해준다.
 > 
 
+![MVC프레임워크](image/MVC프레임워크.JPG)
 - Controller를 구성하는 클래스를 개발하면 너무나 복잡한 구조와 수많은 클래스때문에 혼란스러울 수 있다.
 - 하지만 Controller를 통해 구현하는 이유는 DispatcherServlet 클래스는 유지보수 과정에서 기존의 기능을 수정하거나 새로운 기능을 추가허더라도 절대 수정되지 않는다.
 - 예를 들어 특정 기능을 추가한다면, 관련 Controller클래스를 작성하고 HandlerMapping에 관련 Controller객체를 등록하면 된다.
