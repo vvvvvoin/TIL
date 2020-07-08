@@ -178,15 +178,188 @@ fun arrayAndList(){
 }
 ```
 
+### for and while
+- for문을 이용하여 어레이리스트 값을 출력
+```kotlin
+fun forAndWhile(){
+    val students = arrayListOf("kim", "seo", "cho")
+    for(name in students){
+        println("${name}")
+    }
+    
+    //for문에 withIndex메소드를 이용하여 순서를 매핑시킬 수 있다
+    for((index, name) in students.withIndex()){
+        println("${index+1}번째 학생 이름은 ${name}입니다")
+    }
+    //1번째 학생 이름은 kim입니다
+	//2번째 학생 이름은 seo입니다
+	//3번째 학생 이름은 cho입니다
+    
+    //1 부터 10 까지 순차적으로 누적시키기
+    var sum : Int = 0;
+    for(i in 1..10){
+        sum += i
+    }
+    
+    //1 부터 10 까지 2번씩 끊어서 누적시키기
+    var sum : Int = 0;
+    for(i in 1..10 step 2){
+        sum += i
+    }
+    
+    //10부터 1까지 순차적으로 누적시키기
+    //10..1은 안됨
+    var sum : Int = 0;
+    for(i in 10 downTo 1){
+        sum += i
+    }
+    
+    //1부터 99까지 순차적으로 누적시키기
+    var sum : Int = 0;
+    for(i in 1 until 100){
+        sum += i
+    }
+}
+```
+- while은 기존 문법과 유사하다
+```kotlin
+fun forAndWhile(){
+	var index = 0;
+	while(index < 10){
+		println("현재 값 = ${index}")
+		index++
+	}
+}
+```
+
+### Nullable and NonNull
+```kotlin
+fun nullCheck(){
+    var name = "vvvvv"
+
+    // ?
+    //non-null type인 스트링에 null 값을 대입못하므로
+    var nulllName1 : String = null //오류
+    //? 연산자를 통해 Nullable로 변환한다
+    var nullName2 : String? = null
+
+    //일반적인 스트링 타입을 대문자로 변환하는 메소드
+    var nameUpperCase = name.toUpperCase()
+    //하지만 String값을 받는 nullNmaeUpperCase1 가 non-null String 이기에 대입못함
+    var nullNmaeUpperCase1  = nullName2.toUpperCase() //오류
+    //? 연산자를 사용하여 null이면 null반환 null이 아니면 메소드를 실행
+    var nullNmaeUpperCase2  = nullName2?.toUpperCase()
 
 
+    // ?:
+    //lastName이 null이면 "No lastName"를 반환 null아 아니라면 lastName 대입
+    var lastName : String? = null
+    var fullName = name + lastName?:"No lastName"
 
+}
 
+fun ignoreNUll(str : String?){
+    //str은 nullable타입이 들어와 non-null 타입인 String에 대입될수 없다
+    var notNull1 :String = str   //오류
+    //하지만 !! 연산자를 씀으로서 String 타입인 것을  보증해줄 수 있다
+    var notNull2 :String = str!!
 
+    var address  : String? = "abcedfg"
+    //address가 null이 아닐 경우 let함수를 실행
+    address?.let {
+        println(address)
+    }
 
+}
+```
 
+### class
 
+```kotlin
+fun main(){
+    var person = Person()
+    person.hello()
+}
 
+class Person{
+    var name :String = "vvvvv"
+    fun hello(){
+        println("hello ${name}")
+    }
+}
+```
+- 클래스 이름옆에 생성자를 추가할 수 있다.
+```kotlin
+fun main(){
+    var person = Person("vvvvv")
+    person.hello()
+}
+
+class Person constructor(name : String){
+    var name = name
+    fun hello(){
+        println("hello ${name}")
+    }
+}
+```
+- 생성자를 생략하고 사용가능하다
+```kotlin
+fun main(){
+    var person = Person("bi")
+    person.hello()
+}
+
+class Person (name : String){
+    var name2 = name
+    fun hello(){
+        println("hello ${name2}")
+    }
+}
+```
+- 생성자에서 name값이 지정없이 Person객체가 생성되면 기본값으로 vvvv가 매핑된다
+```kotlin
+fun main(){
+    var person = Person()
+    person.hello()
+}
+
+class Person (name : String = "vvvvv"){
+    var name2 = name
+    fun hello(){
+        println("hello ${name2}")
+    }
+}
+```
+- init()라는 메소드를 이용하여 객체가 만들어짐과 동시에 실행되는 주 생성자로 볼 수 있다
+- 주 생성자와 마찬가지로 부생성자도 존재하는데
+- 따로 클래스내부에 constructor를 이용하여 정할 수 있다
+- 부생성자 옆 this는 주생성자의 name을 위임을 받아야한다
+	- 위임받지 않을 경우 결과
+	- "객체가 만들어짐과 동시에 실행됩니다"
+	- "이름은 감자이고 나이는 55 이도다"
+	- "hello vvvvv"
+- name을 위임받지 않았기에 부생성자에서 name객체는 name2로 매핑될 수 없게된다
+```kotlin
+fun main(){
+    var person = Person("감자", 55)
+    person.hello()
+}
+
+class Person (name : String = "vvvvv"){
+    init {
+        println("객체가 만들어짐과 동시에 실행됩니다")
+    }
+
+    constructor(name : String = "vvvvv", age : Int = -1) : this(name){
+        println("이름은 ${name}이고 나이는 ${age} 이도다")
+    }
+
+    var name2 = name
+    fun hello(){
+        println("hello ${name2}")
+    }
+}
+```
 
 
 
