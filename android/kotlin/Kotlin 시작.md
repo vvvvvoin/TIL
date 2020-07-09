@@ -363,9 +363,23 @@ class Person (name : String = "vvvvv"){
 
 
 
+### 접근제어
+- public이 기본적으로 사용
+- private은 정의된 파일 내부에서만 볼 수 있음
+- internal은 동일한 모듈의 모든 곳에서 볼 수 있음
+- protected는 최상위 선언에는 사용할 수 없음
 
+### 모듈
+- 모듈은 함꼐 컴파일 된 Kotlin파일 세트
+- IntelliJ IDEA module, maven project, gradle source set.....
 
+### 비교연산자
+- '==' 실제 값을 비교해서 동일함을 비교
+- '===' 주소값을 비교해서 동일함을 비교
 
+### 상속
+- 클래스 선언무에 open이 있어야 선언될 수 있고
+- 상속받는 클래스 또한 open이 있어야 한다.
 
 
 
