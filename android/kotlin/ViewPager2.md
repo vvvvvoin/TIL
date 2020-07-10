@@ -152,6 +152,8 @@ class MainActivity : AppCompatActivity() {
     }
 }
 ```
+- 추가적으로 *viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL*을 사용하여 뷰페이지를 수직으로 이동하게 만들수 있다
+
 
 <img src="image/viewPager1.JPG" alt="viewPager1" style="zoom:33%;" />
 <img src="image/viewPager2.JPG" alt="viewPager1" style="zoom:33%;" />
