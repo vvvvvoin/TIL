@@ -63,7 +63,7 @@ dependencies {
 
 ### 4. ViewPagerAdapter.kt
 
-- 기존 [자바]([https://github.com/vvvvvoin/TIL/blob/master/android/java/RecyclerView%20basic.md](https://github.com/vvvvvoin/TIL/blob/master/android/java/RecyclerView basic.md))를 이용한 RecylcerView를 보면 유사함을 볼 수 있다.
+- 기존 [자바](https://github.com/vvvvvoin/TIL/blob/master/android/java/RecyclerView%20basic.md)를 이용한 RecylcerView를 보면 유사함을 볼 수 있다.
 - ViewPageAdapter 클래스는 스트링 리스트를 받는 파라미터를 만들었다
 - 이 리스트의 크기는 getItemCount()에 의해 크기를 받는다
 - 크기값은 getItemViewType() -> onCreateViewHolder() -> onBindViewHolder() 을 반복하여 뷰페이즈를 구현한다.
