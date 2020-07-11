@@ -45,7 +45,7 @@ startService(i);
 	- Activity에서 수행하는 것과 같은 Thread를 사용한다
 	- Service class 내에 전역변수로 Thread를 선언한다
 	- onCreate에 다음코드를 작성한다
-	```java
+```java
 private Thread myThread = new Thread(new Runnable() {
     @Override
     public void run() {
@@ -59,8 +59,10 @@ private Thread myThread = new Thread(new Runnable() {
         }
     }
 });
-	```
-	- Thread생성후 `onStartCommand`에 Thread를 시작한다.
+```
+
+
+- Thread생성후 `onStartCommand`에 Thread를 시작한다.
 
 - 위의 코드를 다시 실행하기 위해 Service를 호출하면 Thread가 `onStartCommand`를 호출하여 숫자카운팅을 하것 같지만 못한다.
 	- 이는 Thread가 `run`후 정려되면 dead상태가 되기 때문이다.
@@ -90,6 +92,7 @@ private Thread myThread = new Thread(new Runnable() {
 	```
 - 하지만 Thread를 생성하징낳고 로직코드를 `onStartCommand`에 넣으면 Activity UI는 멈추게 된다.
 - 그렇다면 Activity에서 Thread를 생성하면 되는거 아닌가???
+	
 	- 의도치 않게 앱이 강제로 종료되었을때, Activity는 죽어서 다시 실행시킬 수 없지만 Service는 특정처리를 진행하면 죽어도 다시 살아나 실행될 수 있기 때문이다.
 
 
@@ -121,7 +124,3 @@ private Thread myThread = new Thread(new Runnable() {
 
 
 
-
-```
-
-```

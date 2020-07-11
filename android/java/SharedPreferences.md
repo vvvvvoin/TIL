@@ -113,12 +113,3 @@ boolean value = sharedPreferences.getBoolean("booleanValue", false);
 
 
 
-
-
-
-
-
-
-```
-
-```

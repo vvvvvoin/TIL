@@ -5,7 +5,7 @@
 - 여러 Activity에서 재사용 유리
 
 #### Fragment 생명주기
-![프래그먼트 생명주기](image/프래그먼트 생명주기.jpg)
+![프래그먼트생명주기](image/프래그먼트생명주기.jpg)
 - void onActivity(Activity activity)
 	- 프래그먼트가 처음으로 Activity에 부착될때 호출
 	- 필수적으로 하나의 Activity에 종속되어야 함

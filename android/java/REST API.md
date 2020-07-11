@@ -39,7 +39,7 @@
   "parm": {
     "_returnType": "json",
     "cityName": "",
-      .......
+....
 ```
 #### VO객체
 
