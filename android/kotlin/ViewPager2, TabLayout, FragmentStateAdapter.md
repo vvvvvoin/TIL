@@ -103,7 +103,7 @@ void populateTabsFromPagerAdapter() {
     }
   }
 ```
-- tabLayout.removeAllTabs() 메소드로 사용자가 만들고 싶은 커스텀 아이템이 초기화가 된다
+- tabLayout.removeAllTabs() 메소드가 기존 탭들을 모두 지우고 새로운 탭을 생성하여 미리 생성한 Tabitem이 사라지게 된다
 - 하지만 TabLayoutMediator.OnConfigureTabCallback가 각 탭을 초기화하고 데이터를 변경할 수 있는 사용자 함수이기에 이를 활용하여 커스텀 탭을 제작할 수 있다.
 
 
