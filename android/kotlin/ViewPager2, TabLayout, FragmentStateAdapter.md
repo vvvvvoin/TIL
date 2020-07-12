@@ -169,3 +169,16 @@ TabLayoutMediator(tablayout, viewPager,
 ![viewPager_tabLayout2](image/viewPager_tabLayout2.JPG)
 
 > 참고 : [https://itnext.io/android-viewpager2-tablayout-3099aae2f396](https://itnext.io/android-viewpager2-tablayout-3099aae2f396)
+
+
+
+## RecyclerView adapter Vs FragmentStateAdapter
+
+![recyclerVIewAdapter](image/recyclerVIewAdapter.JPG)
+![fragmentStateAdapter](image/fragmentStateAdapter.JPG)
+
+- VIewPager2는 RecyclerVIew.Adapter와 FragmentStateAdapter를 모두 수용할 수 있다
+- FragmentStateAdapter는 RecyclerVIew.Adapter의 종속(자식)되어 있다
+- 그리고 둘의 차이점은 RecyclerVIew.Adapter는 View를 inflate하고 FragmentStateAdapter는 Fragment를 inflate하는 것이다
+- 그러므로 RecyclerVIew.Adapter는 ViewPager2에서 static한 정보들을 표시할때 사용된다
+- FragmentStateAdapter는 각 페이지의 생명주기를 고려할때 사용된다
