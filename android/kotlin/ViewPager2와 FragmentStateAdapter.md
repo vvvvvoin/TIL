@@ -64,6 +64,19 @@ class FragmentAdapter(fragmentActivity: FragmentActivity, list: List<Fragment>) 
 
 }
 ```
+> 프래그먼트가 액티비티에 종속적인 하위 액티비티 개념인 만큼 상위 액티비티(여기서는 메인)에 대한 정보(fragmentActivity)가 필요하기에 FragmentStateAdapter 파라미터에 fragmentActivity가 들어간다.
+
+- FragmentStateAdapter 생성자에도 getSupportFragmentManager() 메소드를 이용하여 FragmentManage생성하고 Fragment에 대한 트랜잭션을 관리함을 알 수 있다.
+```java
+public FragmentStateAdapter(@NonNull FragmentActivity fragmentActivity) {
+        this(fragmentActivity.getSupportFragmentManager(), fragmentActivity.getLifecycle());
+    }
+```
+- 그렇기에 MainActivity에서 트랜잭션에 관한 정의가 없다
+- MainActivity 차이점은 [java fragment](https://github.com/vvvvvoin/TIL/blob/master/android/java/Fragment.md)에서 확인해 볼 수 있다.
+
+
+
 ### MainActvity
 - 만든 프래그먼트를 초기화 해준다.
 - 초기화된 프래그먼트를 list에 묶어 FragmentAdapter의 파라미터로 지정한다.
