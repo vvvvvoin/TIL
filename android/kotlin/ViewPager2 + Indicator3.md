@@ -65,6 +65,36 @@ implementation 'me.relex:circleindicator:2.1.4'
 ```
 - 현재 `ci_drawable`의 값을 `@drawable/indicator_selected`으로 설정하였다
 - 만약에 인디케이터 xml파일의 이름이 `white_radius.xml`일 경우xml에 `ci_drawable` , `ci_drawable_unselected`엘리먼트를 설정하지 않아도  `white_radius.xml`파일을 이용하여 자동적으로 선택, 비선택을 자동적으로 매핑해준다
+- `Indicator`의 초기화 initialize()메소드 에서 config는 xml에 정의된 엘리먼트들의 값을 가지고 있다
+- 메소드의 로직에서 값들이 없거나 불명확한 값일 경우 기본값으로 설정해준다
+
+```java
+public void initialize(Config config) {
+        int miniSize = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                DEFAULT_INDICATOR_WIDTH, getResources().getDisplayMetrics()) + 0.5f);
+        mIndicatorWidth = (config.width < 0) ? miniSize : config.width;
+        mIndicatorHeight = (config.height < 0) ? miniSize : config.height;
+        mIndicatorMargin = (config.margin < 0) ? miniSize : config.margin;
+
+        mAnimatorOut = createAnimatorOut(config);
+        mImmediateAnimatorOut = createAnimatorOut(config);
+        mImmediateAnimatorOut.setDuration(0);
+
+        mAnimatorIn = createAnimatorIn(config);
+        mImmediateAnimatorIn = createAnimatorIn(config);
+        mImmediateAnimatorIn.setDuration(0);
+		
+	    //인디케이터를 설정해주지 않으면 R.drawable.white_radius을 기본으로 indicator가 된다
+        mIndicatorBackgroundResId =
+                (config.backgroundResId == 0) ? R.drawable.white_radius : config.backgroundResId;
+        mIndicatorUnselectedBackgroundResId =
+                (config.unselectedBackgroundId == 0) ? config.backgroundResId
+                        : config.unselectedBackgroundId;
+
+        setOrientation(config.orientation == VERTICAL ? VERTICAL : HORIZONTAL);
+        setGravity(config.gravity >= 0 ? config.gravity : Gravity.CENTER);
+    }
+```
 
 | Properties                 | Default Value               |
 | :------------------------- | :-------------------------- |
@@ -78,7 +108,7 @@ implementation 'me.relex:circleindicator:2.1.4'
 | app:ci_orientation         | horizontal                  |
 | app:ci_gravity             | center                      |
 
-- 애니메이션은 xml의 objectAnimator 태그를 이용해서 설정할 수 있다
+- 애니메이션은 xml의 다음의 objectAnimator 태그를 이용해서 설정할 수 있다
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android"
