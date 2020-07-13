@@ -78,6 +78,27 @@ implementation 'me.relex:circleindicator:2.1.4'
 | app:ci_orientation         | horizontal                  |
 | app:ci_gravity             | center                      |
 
+- 애니메이션은 xml의 objectAnimator 태그를 이용해서 설정할 수 있다
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="@android:integer/config_shortAnimTime">
+
+    <objectAnimator
+        android:propertyName="alpha"
+        android:valueType="floatType"
+        android:valueFrom="0.2"
+        android:valueTo="1.0"/>
+
+    <objectAnimator
+        android:propertyName="rotation"
+        android:valueType="floatType"
+        android:valueFrom="0"
+        android:valueTo="180"/>
+</set>
+```
+- [참고](https://github.com/ongakuer/CircleIndicator)를 통해서 자세히 알 수 있다.
+
 ### MainActivity
 - 인디케이터를 선언해주고 어떤 View에 적용할지를 매핑한다
 - 적용될 페이지의 크기또한 인디케이터에 매핑해줘야 한다
@@ -110,4 +131,4 @@ viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(
 })
 ```
 
-> app:ci_animator에 대한 내용과 기타 다양한 정보 보충하겠음
+> 참고 circleIndicator : [https://github.com/ongakuer/CircleIndicator](https://github.com/ongakuer/CircleIndicator)
