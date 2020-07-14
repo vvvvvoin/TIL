@@ -253,24 +253,24 @@ public class SqlSessionFactoryBean {
 - SqlSession 객체는 Mapper XML에 등뢱돈 SQL을 실행하기 위한 다양한 API를 제공한다
 
 1. selectOne()
-- selectOne 메소드는 하나의 데이터를 검색하는 SQL구문을 실행할 때 사용한다
-- 쿼리가 한 개의 레코드만 리턴되는지 검사하므로 만약 쿼리의 수행결과로 두 개 이상의 레코드가 리턴될 때에는 예외가 발생한다.
-	- public Obejct selectOne(String statement)
-	- public Obejct selectOne(String statement, Object parameter)
-- statement매개변수는 MapperXMl 파일에 등록된 SQL의 아이디이다
-- 이때 SQL의 아이디를 네임스페이스와 결합하여 지정한다.
-- 실행될 SQL 구문에서 사용할 파라미터 정보를 두 번째 인자로 지정하면 된다.
+	- selectOne 메소드는 하나의 데이터를 검색하는 SQL구문을 실행할 때 사용한다
+	- 쿼리가 한 개의 레코드만 리턴되는지 검사하므로 만약 쿼리의 수행결과로 두 개 이상의 레코드가 리턴될 때에는 예외가 발생한다.
+		- public Obejct selectOne(String statement)
+		- public Obejct selectOne(String statement, Object parameter)
+	- statement매개변수는 MapperXMl 파일에 등록된 SQL의 아이디이다
+	- 이때 SQL의 아이디를 네임스페이스와 결합하여 지정한다.
+	- 실행될 SQL 구문에서 사용할 파라미터 정보를 두 번째 인자로 지정하면 된다.
 
 2. selectList()
-- selectList 메소드는 여러 개의 데이터가 검색되는 SQL구믄을 실행할때 사용더ㅣ며 매개변수의 의미는 selectOne() 메소드와 같다
-	- public List selectList(String statement)
-	- public List selectList(String statement, Object parameter)
+	- selectList 메소드는 여러 개의 데이터가 검색되는 SQL구믄을 실행할때 사용더ㅣ며 매개변수의 의미는 selectOne() 메소드와 같다
+		- public List selectList(String statement)
+		- public List selectList(String statement, Object parameter)
 
 3. insert(), update(), delete()
-- 각각의 메소드는 실행된 SQL 구문으로 인해 몇 건의 데이터가 처리되었는지를 리턴한다.
-	- public int insert(String statement, Object parameter)
-	- public int update(String statement, Object parameterObject) throws SQLException
-	- public int delete(String statement, Object parameterObject) throws SQLException
+	- 각각의 메소드는 실행된 SQL 구문으로 인해 몇 건의 데이터가 처리되었는지를 리턴한다.
+		- public int insert(String statement, Object parameter)
+		- public int update(String statement, Object parameterObject) throws SQLException
+		- public int delete(String statement, Object parameterObject) throws SQLException
 
 
 
