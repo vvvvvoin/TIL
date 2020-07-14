@@ -346,3 +346,7 @@ public class BoardServiceClient {
 
 
 ![mybatis구성](image/mybatis구성.JPG)
+
+
+
+> 이 프로젝는 `simple Spring Mavent` 프로젝트가 생성되지 않아 `Spring MVC Project`로 수행하였음
