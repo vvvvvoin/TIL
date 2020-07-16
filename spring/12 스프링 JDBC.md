@@ -174,7 +174,7 @@ public void setSuperDataSource(DataSource dataSource){
 }
 ```
 
-![JdbcDaoSupport 클래스 상속](image/JdbcDaoSupport 클래스 상속.JPG)
+![JdbcDaoSupport클래스상속](image/JdbcDaoSupport클래스상속.JPG)
 
 ##### 두 번째 방법 : JdbcDaoSupport 클래스 bean등록 의존성 주입
 - 일반적으로 JdbcTemplate클래스를 bean에 등록하고 의존성 주입 방법을 사용한다.
