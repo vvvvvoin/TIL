@@ -1,4 +1,4 @@
-# Retofit
+# Retrofit
 - 서버와  통신하는데 자주 사용되는 유용한 라이브러리이다.
 - Restful에서 HttpURLConnection을 사용하여 서버 통신을 연결할 수도 있다
 - 하지만 다음과 같은 코드가 많아지고 직관적이지 못하다

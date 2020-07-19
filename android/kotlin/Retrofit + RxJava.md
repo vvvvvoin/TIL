@@ -1,4 +1,4 @@
-## Restrofit + RxJava
+## Retrofit + RxJava
 - 기존에 만든 Retrofit을 참고하길 바란다
 ### dependencies
 ```
