@@ -98,7 +98,7 @@ interface kakaoApiService {
 interface PostService {
     @POST("/post/service/web")
     fun getData(
-         @Body("name") name: String
+         @Body name: String
     ) : Single<?>
 }
 ```
