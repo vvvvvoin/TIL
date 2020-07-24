@@ -148,6 +148,45 @@ override fun onMapReady(googleMap: GoogleMap) {
 
 
 
+- 추가적으로 clusterManager.addItem(item: Cluster) 메소드에서 item에 getPosition, getTitle, getSnippet 오버라이딩 되었어서 Lntlng객체로 값을 받지 않고 Double형태로 값을 받아 position리턴을 Latlng타입으로 반환시켜도 된다
+
+- DB를 사용하는데 좀 더 편리하게 할수 있지 않을까 싶다
+
+  ```kotlin
+  data class MarkerDataVO(
+  	 //val location: LatLng,
+       private val title: String,
+       private val snippet: String,
+       val lat: Double,
+       val lng: Double,
+       val writer: String,
+       val address: String
+  ) : ClusterItem {
+      override fun getPosition(): LatLng {
+          //return location
+          return LatLng(lat, lng)
+      }
+  
+      override fun getSnippet(): String? {
+          return snippet
+      }
+  
+      override fun getTitle(): String? {
+          return title
+      }
+  }
+  ```
+
+  ```kotlin
+  //var testLatLng1 = LatLng(37.328294, 126.843297)
+  //clusterManager.addItem(MarkerDataVO(testLatLng1, "테스트", "테스트", "테스트", "1", "테스트"))
+  clusterManager.addItem(MarkerDataVO("테스트", "내용", 37.328294, 126.843297, "작성자", "주소"))
+  ```
+
+  
+
+
+
 참조 : [https://all-dev-kang.tistory.com/entry/안드로이드-구글맵-마커-클러스터링-커스텀-마커-마커-클릭-이벤트-구현?category=894155](https://all-dev-kang.tistory.com/entry/안드로이드-구글맵-마커-클러스터링-커스텀-마커-마커-클릭-이벤트-구현?category=894155)
 
 [https://imleaf.tistory.com/18](https://imleaf.tistory.com/18)
