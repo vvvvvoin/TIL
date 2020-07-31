@@ -183,7 +183,10 @@ override fun onMapReady(googleMap: GoogleMap) {
   clusterManager.addItem(MarkerDataVO("테스트", "내용", 37.328294, 126.843297, "작성자", "주소"))
   ```
 
-  
+### Cluster Refresh
+- 사용중 구글맵에 클러스터매니저를 통해 아이템을 추가하게(clusterManager.addItem()) 되면 즉각적으로 반영이 되지 않는다
+- 이때 ClusterManager().cluster()를 이용하여 다시 클러스터하여 추가된 아이템 리스트를 불러와 보여주게 된다
+- 단, 이때 ClusterManager().cluster() 는 `Main.thread`에서 동작해야한다
 
 
 
