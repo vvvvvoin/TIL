@@ -21,6 +21,40 @@
 
 ![room아키텍처](image/room_architecture.JPG)
 
+### gradle
+
+```
+dependencies {
+	def room_version = "2.2.5"
+
+	implementation "androidx.room:room-runtime:$room_version"
+	annotationProcessor "androidx.room:room-compiler:$room_version" // For 	Kotlin use kapt instead of annotationProcessor
+
+	// optional - Kotlin Extensions and Coroutines support for Room
+	implementation "androidx.room:room-ktx:$room_version"
+
+	// optional - RxJava support for Room
+	implementation "androidx.room:room-rxjava2:$room_version"
+
+	// optional - Guava support for Room, including Optional and ListenableFuture
+	implementation "androidx.room:room-guava:$room_version"
+
+	// Test helpers
+	testImplementation "androidx.room:room-testing:$room_version"
+}
+```
+
+> **참고:** Kotlin 기반 앱에서는 `annotationProcessor` 대신 `kapt`를 사용해야 합니다. 또한 `kotlin-kapt` 플러그인도 추가해야 합니다.
+
+```
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'	//참고
+android {
+    compileSdkVersion 30
+```
+
+
+
 ### Database
 - 구글문서에 다음 설명이 있다
 > 참고: 앱이 단일 프로세스에서 실행되면 AppDatabase 객체를 인스턴스화할 때 싱글톤 디자인 패턴을 따라야 합니다. 각 RoomDatabase 인스턴스는 리소스를 상당히 많이 소비합니다. 그리고 단일 프로세스 내에서 여러 인스턴스에 액세스할 필요가 거의 없습니다.
