@@ -121,3 +121,7 @@ data class MarkerEntity (
     var content: String = "",
 )
 ```
+
+참고 :[https://developer.android.com/training/data-storage/room/index.html]( https://developer.android.com/training/data-storage/room/index.html)
+
+[[https://medium.com/@gus0000123/mvvm-aac-room%EC%82%AC%EC%9A%A9%EB%B2%95-1-%EA%B0%9C%EB%85%90%ED%8E%B8-59ad680ea6fe](https://medium.com/@gus0000123/mvvm-aac-room사용법-1-개념편-59ad680ea6fe)]
