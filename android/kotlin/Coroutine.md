@@ -245,4 +245,72 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ![coroutin](image/coroutine10.JPG)
 
-> 계속....
+#### Async, Await
+- 기존에 사용한 코드를 다시 본다
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val time = measureNanoTime {
+                val networkAnswer = networkProcess()
+                val networkAnswer2 = networkProcess2()
+                Log.d(TAG, networkAnswer)
+                Log.d(TAG, networkAnswer2)
+            }
+            Log.d(TAG, "time is ${time} ms")
+        }
+    }
+
+    suspend fun networkProcess() : String{
+        delay(2000L)
+        return "done networkProcess"
+    }
+    suspend fun networkProcess2() : String{
+        delay(2000L)
+        return "done networkProcess"
+    }
+}
+```
+- 위 코드를 실행하면 코루틴스코프에서 `networkProcess()` 메소드는 동시에 실행이되어 해당 작업을 수행하는 스레드는 4초간 정지하게 된다
+- 이를 `measureNanoTime`이용하여 실제 시간을 출력해본다
+- 그러면 약 4초의 시간이 걸린것을 확인할 수 있다.
+![coroutin](image/coroutine11.JPG)
+
+- 하지만 사용자 입장에서 동시에 실행이 되는 것이 아닌 싱크문제, 순차처리로 인해 `networkProcess()`메소드를 순서대로 실행시키고자 할 수 있다
+- 그래서 기존에 배운 join()을 이용하여 다음과 같이 처리할 수 있다
+```kotlin
+GlobalScope.launch(Dispatchers.IO) {
+            val time = measureTimeMillis {
+                var answer1 : String? = null
+                var answer2 : String? = null
+                val job1 = launch { answer1 = networkProcess() }
+                val job2 = launch { answer2 = networkProcess2() }
+                job1.join()
+                job2.join()
+                Log.d(TAG, "${answer1}")
+                Log.d(TAG, "${answer2}")
+            }
+            Log.d(TAG, "time is ${time} ms")
+        }
+```
+![coroutin](image/coroutine12.JPG)
+- 그러나 이런 코드는 권장하지 않는다
+- 이런 처리를 위해 Async, Await 를 사용한다
+- async는 launch와 마찬가지로 코루틴을 새롭게 시작하는데 launch의 리턴값이 unit인 반면에 async는 Deferred<T>로 나타난다
+```kotlin
+GlobalScope.launch(Dispatchers.IO) {
+            val time = measureTimeMillis {
+                val answer1 = async { networkProcess() }
+                val answer2 = async { networkProcess2() }
+                Log.d(TAG, "${answer1.await()}")
+                Log.d(TAG, "${answer2.await()}")
+            }
+            Log.d(TAG, "time is ${time} ms")
+        }
+```
+![coroutin](image/coroutine15.JPG)
+
+- 이는 async로 실행된 코루틴이 종료되고 이에 대한 반환값을 받으려면 await를 사용하는데 이때 Deferred안의 제너릭 값이 반환된다
+- 이를 이용하여 복잡한 로직처리에서 유용하게 사용된다
