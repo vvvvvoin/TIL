@@ -28,6 +28,20 @@
 - Spring MVC
 - Mybatis
 
+## oracleDM
+
+- select
+- 함수
+- 조인
+- 서브쿼리
+- DML
+- 트랜잭션
+- DDL
+- 객체
+- 제약조건
+- 사용자 권한, 롤
+- PL/SQL
+
 ## Python
 
 ## Git
