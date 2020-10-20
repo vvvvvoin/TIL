@@ -28,7 +28,7 @@
 - Spring MVC
 - Mybatis
 
-## oracleDM
+## Oracle DB
 
 - select
 - 함수
