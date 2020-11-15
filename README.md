@@ -5,7 +5,7 @@
 - BottomNavigationView
 - Coroutine
 - GoogleMap API
-- Retrofit with RxJava
+- Retrofit with RxJava, OkHttp3
 - Room
 - ViewPager2 with Tablayout, FragmentStateAdapter
 ### Java
@@ -45,6 +45,22 @@
 - 커서와 예외 처리
 - 저장 서브프로그램
 
+## Git
+
+- 사용방법
+
 ## Python
 
-## Git
+- 기초
+- 크롤링
+- 플라스크
+- 텔레그램 챗 봇
+
+## 코딩테스트
+
+- 프로그래머스
+- 올림피아
+
+## 전산학
+- OS
+- 자료구조와 알고리즘
