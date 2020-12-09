@@ -13,11 +13,11 @@
 
 ### 1. firebase에 앱 추가하기
 
-![1](image/firebase - fcm/1.JPG)
+![1](image/firebase-fcm/1.JPG)
 
 - firebase프로젝트를 만든 후 앱 추가 버튼을 눌러 안드로이드 아이콘을 클릭한다.
 
-![2](image/firebase - fcm/2.JPG)
+![2](image/firebase-fcm/2.JPG)
 
 - 디버그 섬명 인증서 SHA-1은 안드로이드 스튜디오 화면에 우측상단에 gradle - Tasks - android - signingReport를 클릭하면 콘솔창에 SHA-1 값이 나온다.
 
@@ -60,17 +60,17 @@ implementation 'com.google.firebase:firebase-messaging-ktx'
     }
 ```
 
-![3](image/firebase - fcm/3.JPG)
+![3](image/firebase-fcm/3.JPG)
 
 ### 4. firebase Admin SDK & dependency
 
-![4](image/firebase - fcm/4.JPG)
+![4](image/firebase-fcm/4.JPG)
 
 - 파이어베이스 콘솔에 들어간 후 좌측 상단에 톱니바퀴 - 프로젝트설정 - 서비스 계정을 들어가면 다음 화면을 볼 수 있다.
 - 그리고 새 비공개 키 생성을 통해 json타입의 파일을 다운 받는다.
 - 다운 받은 파일은 Spring 프로젝트에 원하는 곳에 넣도록 한다.
 
-![5](image/firebase - fcm/5.JPG)
+![5](image/firebase-fcm/5.JPG)
 
 - 그리고 Spring 프로젝트에서도 firebase를 이용할 수 있도록 pom.xml에 dependency를 추가해야한다.
 
@@ -154,7 +154,7 @@ public String notifyTest(){
 
 
 ## 결과
-![6](image/firebase - fcm/6.JPG)
+![6](image/firebase-fcm/6.JPG)
 
 - 이 방법은 Token값으로 특정 기기에게만 notification하는 것이고 https://firebase.google.com/docs/cloud-messaging/send-message?hl=ko 을 통해서 여러 기기, 특정주제 등 다양한 방식이 있다.
 - 또한 포그라운드, 백그라운드에 따른 설정도 추가할 수 있다.
