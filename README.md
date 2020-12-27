@@ -4,7 +4,9 @@
 ### Kotlin
 - BottomNavigationView
 - Coroutine
+- EventWrapper
 - GoogleMap API
+- FCM
 - Retrofit with RxJava, OkHttp3
 - Room
 - ViewPager2 with Tablayout, FragmentStateAdapter
@@ -64,3 +66,4 @@
 ## 전산학
 - OS
 - 자료구조와 알고리즘
+- Kotlin
