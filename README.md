@@ -2,11 +2,16 @@
 
 ## Android
 ### Kotlin
+
 - BottomNavigationView
 - Coroutine
+- DataBinding
 - EventWrapper
 - GoogleMap API
 - FCM
+- KOIN
+- ViewModel
+- LiveData
 - Retrofit with RxJava, OkHttp3
 - Room
 - ViewPager2 with Tablayout, FragmentStateAdapter
