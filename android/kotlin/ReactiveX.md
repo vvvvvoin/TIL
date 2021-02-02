@@ -450,6 +450,23 @@ Observable.just(1,2,3,4,5,6,7,8,9)
 
 > filter는 Predicate 함수형 인터페이스로 입력값 하나, boolean값을 리턴한다
 
+#### Distinct
+
+- 발행되는 데이터가 중복되지 않게 한다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/distinct.png"/></div>
+
+```kotlin
+Observable.just(1,2,3,1,2,3,4)     
+    .distinct()                    
+    .subscribe(System.out::println)
+//결과
+//1
+//2
+//3
+//4
+```
+
 #### First, Last
 
 - First와 Last는 발행된 데이터의 첫번째와 마지막 값을 받는 필터링 operator이다
@@ -555,10 +572,52 @@ Observable.just("1","2","3","4","5")
 
 - flatMap내부에 새로운 Observable을 이용하여 200ms주기 마다 정수를 발행하는 값을 value에 붙였다.
 - 또한 출력 결과는 순서를 보장하지 않는다는 것을 확인 할 수 있다.
-
 - 대신 `concatMap`을 사용하여 순서를 보장할 수 있지만 성능은 flatMap에 비해 떨어진다.
-
 - 또한 `concatMap`에 여러 Observable이 사용되면 다음과 같이 병합되지 않고 연결된다.
+
+#### Debounce
+
+- 특정시간 범위에서의 항목을 방출하지 않고 범위를 경과한 값을 방행한다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/debounce.png"/></div>
+
+```kotlin
+Observable.interval(105, TimeUnit.MILLISECONDS)
+    .take(5)
+    .debounce(100, TimeUnit.MILLISECONDS)
+    .subscribe(System.out::println)
+//결과 (매번바뀜)
+//1
+//3
+//4
+```
+
+- 105ms간격마다 데이터를 입력하고 발행 시점에서 100ms가 지나면 해당값을 출력하게 된다.
+- 5ms의 미세한 오차를 두어 몇몇 데이터가 출력되지 않음을 볼 수 있다.
+- 이를 안드로이드에서 키보드 입력을 받을때 매번 새로운 입력이 들어올때마다 로직을 수행하는 것이아닌 debounce를 사용해 키보드 입력이 끝난 몇 ms후 로직을 수행할 수 있다.
+
+#### Scan
+
+- Scan은 순차적으로 함수를 적용하여 연속적으로 값을 방출한다.
+- Java Stream의 Reduce와 같은 역할을 수행하는데 Scan은 순차적으로 처리된 값을 출력해준다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/scan.png"/></div>
+
+```kotlin
+Observable.just("a","b","c","d","e")
+    .scan { now, next ->            
+        "${now} -> ${next}"         
+    }                               
+    .subscribe(System.out::println) 
+//결과
+//a
+//a -> b
+//a -> b -> c
+//a -> b -> c -> d
+//a -> b -> c -> d -> e
+```
+
+- 순차적으로 발행된 값이 처리되는 과정을 알 수 있게 된다.
 
 ### 연산
 
@@ -576,4 +635,213 @@ Observable.just("a","b","c","d","e")
     .subscribe(System.out::println)
 //결과
 //a -> b -> c -> d -> e
+```
+
+- Scan과 다르게 한번에 출력만을 보여준다.
+
+#### Concat
+
+- 두 개 이상의 Observable을 발행되는 데이터를 중간에 섞이지 않고 순차적으로 발행시킨다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/concat.png"/></div>
+
+```kotlin
+val observable1 = Observable.interval(0, 100, TimeUnit.MILLISECONDS)
+    .map { "observable1 = $it" }
+    .take(5)
+
+val observable2 = Observable.interval(0, 200, TimeUnit.MILLISECONDS)
+    .map { "observable2 = $it" }
+    .take(5)
+
+Observable.concat(observable1, observable2)
+    .subscribe(System.out::println)
+//결과
+//observable1 = 0
+//observable1 = 1
+//observable1 = 2
+//observable1 = 3
+//observable1 = 4
+//observable2 = 0
+//observable2 = 1
+//observable2 = 2
+//observable2 = 3
+//observable2 = 4
+```
+
+### 결합
+
+#### Zip
+
+- 지정된 기능을 통해 최소2개, 최대9개 Observable을 결합하여 순차적인 결합에 의해 데이터를 발행한다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/zip.png"/></div>
+
+```kotlin
+val observable1 = Observable.just(1,2,3,4,5,6,7)
+val observable2 = Observable.just("a","b","c")
+
+Observable.zip(observable1, observable2, BiFunction { obs1, obs2 ->
+    return@BiFunction "$obs1 + $obs2"
+}).subscribe(System.out::println)
+//결과
+//1 + a
+//2 + b
+//3 + c
+```
+
+- Zip의 특성상 순차적인 결합으로 observable1의 남은 데이터 4,5,6,7은 결합될 observable이 없어 출력되지 않는다.
+
+#### CombineLatest
+
+- 두 개의 Observable 중 하나의 데이터가 발행되는 경우 지정된 함수를 통해 각 Observable에서 발행된 최신데이터와 결합하여 이를 발행한다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/combineLatest.png"/></div>
+
+```kotlin
+val list1 = mutableListOf(1,2,3,4,5,6,7,8,9)
+val list2 = mutableListOf("dog","cat","elephant", "human","thanos","deer")
+
+val observable1 = Observable.fromIterable(list1)
+    .zipWith(Observable.interval(200, TimeUnit.MILLISECONDS), BiFunction { int, time ->
+        return@BiFunction int
+    })
+val observable2 = Observable.fromIterable(list2)
+    .zipWith(Observable.interval(150, 200, TimeUnit.MILLISECONDS), BiFunction { str, time ->
+        return@BiFunction str
+    })
+
+Observable.combineLatest(observable1, observable2, BiFunction { obs1, obs2 ->
+    return@BiFunction "$obs1 + $obs2"
+}).subscribe(System.out::println)
+//결과
+//1 + dog
+//1 + cat
+//2 + cat
+//2 + elephant
+//3 + elephant
+//3 + human
+//4 + human
+//4 + thanos
+//5 + thanos
+//5 + deer
+//6 + deer
+//7 + deer
+//8 + deer
+//9 + deer
+```
+
+- observable1이 값을 발행하고 observable2가 150ms 늦게 시작하게 된다.
+- 약간의 차이로 최근에 발행된 값과 함께 출력됨을 알 수 있다.
+
+#### Merge
+
+- 여러 Observable를 하나의 발행으로 결합시킨다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/merge.png"/></div>
+
+```kotlin
+val observable1 = Observable.interval(0, 100, TimeUnit.MILLISECONDS)
+    .map { "observable1 = $it" }
+    .take(5)
+
+val observable2 = Observable.interval(0, 200, TimeUnit.MILLISECONDS)
+    .map { "observable2 = $it" }
+    .take(5)
+
+Observable.merge(observable1, observable2)
+    .subscribe(System.out::println)
+//결과
+//observable1 = 0
+//observable2 = 0
+//observable1 = 1
+//observable1 = 2
+//observable2 = 1
+//observable1 = 3
+//observable2 = 2
+//observable1 = 4
+//observable2 = 3
+//observable2 = 4
+```
+
+### 상태 및 boolean
+
+#### All
+
+- Observable에서 발행되는 모든 데이터가 조건을 만족시키는 확인
+
+<div><img src="http://reactivex.io/documentation/operators/images/all.png"/></div>
+
+```kotlin
+Observable.just("a", "b", "c", "d", "e", 5)
+    .all { it is String }
+    .subscribe({
+        if (it == true) println("all is String type")
+        else println("there are another type")
+    }, {
+        println("error")
+    })
+//결과
+//there are another type
+```
+
+- all의 매개변수는 `Predicate`이므로 결과가 `boolean`타입으로 반환되고 이는 1개의 값만을 발행하는 것을 보장하기 때문에 `Single`을 반환한다.
+
+#### Amb
+
+- 둘 이상의 Observable이 주어지면 그 중 첫 번째로 발행된 Observable만을 발행한다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/amb.png"/></div>
+
+```kotlin
+val observable1 = Observable.interval(100, TimeUnit.MILLISECONDS).take(3).map { "observable1 = $it" }
+val observable2 = Observable.interval(50, TimeUnit.MILLISECONDS).take(3).map { "observable2 = $it" }
+val observable3 = Observable.interval(0,100, TimeUnit.MILLISECONDS).take(3).map { "observable3 = $it" }
+val list = listOf(observable1, observable2, observable3)
+
+Observable.amb(list).subscribe(System.out::println)
+//결과
+//observable3 = 0
+//observable3 = 1
+//observable3 = 2
+```
+
+- observable3은 최초 딜레이 없이 곧바로 값을 발행하여 observable3의 데이터만 발행하게 된다.
+
+#### TakeUntil
+
+- 두 번째 Observable에서 발행데이터를 받게 되면 모든 항목을 삭제하고 발행을 멈춘다.
+- 만약 두 번재 발행이 첫 번째 발행과 겹치게 되면 출력하고 발행을 중지한다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/takeUntil.png"/></div>
+
+```kotlin
+Observable.interval(100, TimeUnit.MILLISECONDS)
+    .map { "observable = $it" }
+    .takeUntil(Observable.timer(500, TimeUnit.MILLISECONDS))
+    .subscribe(System.out::println)
+//결과
+//observable = 0
+//observable = 1
+//observable = 2
+//observable = 3
+```
+
+#### SkipUntil
+
+- TakeUntil과 다르게 두번째 Observable에서 발행된 이후 데이터를 발행하게 된다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/skipUntil.png"/></div>
+
+```kotlin
+Observable.interval(100, TimeUnit.MILLISECONDS)
+    .take(10)
+    .skipUntil(Observable.timer(500, TimeUnit.MILLISECONDS))
+    .subscribe(System.out::println)
+//결과
+//5
+//6
+//7
+//8
+//9
 ```
