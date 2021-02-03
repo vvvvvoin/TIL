@@ -13,6 +13,15 @@
   - onCompleted - 스트림의 종료
   - onError - 에러 신호를 전달
 
+## 환경
+### 작업툴
+- IntelliJ IDEA Community Edition 2020.3 x64
+### dependency
+```groovy
+implementation ("io.reactivex.rxjava3:rxjava:3.0.9");
+implementation ("io.reactivex.rxjava3:rxkotlin:3.0.1");
+```
+
 ## Observable
 
 - 이벤트 발행하는 주체
@@ -197,6 +206,7 @@ val disposable = Observable.interval(100, TimeUnit.MILLISECONDS)
 compositeDisposable.add(disposable)
 Thread.sleep(2000)
 compositeDisposable.clear()
+Thread.sleep(2000)
 println("main end")
 //결과
 //...
@@ -1193,16 +1203,8 @@ observable.retry(2).subscribe({
 //onError = java.lang.Exception: error
 ```
 
-## 정리
-
-- ReactiveX에는 크게 Observable, Operator, Subject, Scheduler로 나눌 수 있다.
-- 각 구성요소마다 사용되는 메서드 또한 다양하기에 ReactiveX의 러닝커브는 높다
-- 하지만 다른 비동기처리 라이브러리보다 람다식과 함수형 인터페이스를 통해 직관적인 흐름을 만들어 갈 수 있다.
-- 그외에도 여러 언어 특성에 맞게 구현되어 있다.
-
 > 참고 :
 >
 > [ReactiveX](http://reactivex.io/)
 >
 > ['Language/Rx' 카테고리의 글 목록 (tistory.com)](https://jaejong.tistory.com/category/Language/Rx)
-
