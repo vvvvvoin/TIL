@@ -1,7 +1,7 @@
 # ReactiveX
 
-- Reactive Prgram은 옵저버 패턴으로 구독자에게 변경사항을 알려주는 비동기 기반 프로그래밍이다.
-- 일반적인 명령형 프로그램이 아닌 데이터의 흐름을 먼저 정의하고 데이터가 변경되었을 때 연관되는 메소드가 업데이트 되는 방식을 Reaxtive Programming이라고 한다.
+- Reactive Prgram은 Observer, Iterator, Functional Programming을 결합한 비동기 프로그래밍이다.
+- 일반적인 명령형 프로그램이 아닌 데이터의 흐름을 먼저 정의하고 데이터가 변경되었을 때 연관되는 연산자를 통해 처리되는 방식을 Reaxtive Programming이라고 한다.
 - 즉 필요에 의해 데이터를 요청하여 가공하는 것(절차형)이 아닌, 데이터를 관리주체하는 `Observable`에 데이터 변경시 요청을 받을 수 있도록 subscribe하여 변경사항을 전달하는 방식이다.
 - 데이터의 흐름, 스트림을 만드는 `Observable`
   - 스트림을 만드는 일을 누가 할것인지 지정하는 `subscribeOn`
@@ -122,7 +122,8 @@ Observable.just("a", "b", "c", "d", "e")
 
 #### Subscribe 해지
 
-- 구독해지도 신청과 마찬가지로 2가지 방법이 존재한다.
+- 구독해지에는 몇가지 방법이 존재한다.
+
 - 구독시 observer객체를 넣어 해당 객체에 `Disposable`과 관련된 로직을 정의한다.
 - `Disposable`를 `dispose()`를 이용하면 구독이 해지된다.
 
@@ -174,6 +175,28 @@ val disposable = Observable.interval(100, TimeUnit.MILLISECONDS)
     }                                                           
 Thread.sleep(2000)                                              
 disposable.dispose()                                            
+println("main end")
+//결과
+//...
+//onNext = 17
+//onNext = 18
+//main end
+```
+
+##### 3. CompositeDisposable 
+
+- CompositeDisposable 객체를 생성하여 add() 메서드를 이용해 다수의 disposable객체를 담아 한번에 해지할 수도 있다.
+- 내부적으로 OpenHashSet으로 disposable객체를 담고 있다.
+
+```kotlin
+val compositeDisposable= CompositeDisposable()
+val disposable = Observable.interval(100, TimeUnit.MILLISECONDS)
+    .subscribe {
+        println("onNext = ${it}")
+    }
+compositeDisposable.add(disposable)
+Thread.sleep(2000)
+compositeDisposable.clear()
 println("main end")
 //결과
 //...
@@ -845,3 +868,341 @@ Observable.interval(100, TimeUnit.MILLISECONDS)
 //8
 //9
 ```
+
+## Scheduler
+
+- 일반적으로 Observable를 호출하는 Thread에서 동작한다.
+  - `interval`, `timer`로 생성된 Observable은 계산 Scheduler인 Computation을 사용함
+- Scheduler는 Observable의 Thread를 지정해주는 역할을 한다.
+- 데이터의 흐름을 발생시키는 스레드를 `subscribeOn`로 지정
+- 전달받은 데이터를 처리하는 스레드를 `observeOn`로 지정
+
+### Schedulers
+
+#### Schdulers.io
+
+- I/O 처리와 같은 DB, 네트워크작업을 위한 scheduler이다.
+- 캐쉬된 스레드가 있을시 재활용하고 필요에 따라 스레드풀에서 생성된다.
+- 일반적인 계산작업에는 Schedulers.computation을 사용해야한다.
+
+```kotlin
+val observable = Observable.just(1,2,3)
+observable
+    .subscribeOn(Schedulers.io())
+    .subscribe {
+    println("1. ${Thread.currentThread().name} is working, value is ${it}")
+}
+
+observable
+    .subscribeOn(Schedulers.io())
+    .subscribe {
+    println("2. ${Thread.currentThread().name} is working, value is ${it}")
+}
+//결과
+//2. RxCachedThreadScheduler-2 is working, value is 1
+//1. RxCachedThreadScheduler-1 is working, value is 1
+//1. RxCachedThreadScheduler-1 is working, value is 2
+//2. RxCachedThreadScheduler-2 is working, value is 2
+//1. RxCachedThreadScheduler-1 is working, value is 3
+//2. RxCachedThreadScheduler-2 is working, value is 3
+```
+
+- 메인스레드에서 호출하여 캐쉬된 스레드를 사용하여 비동기적으로 처리한다.
+
+#### Schedulers.computation
+
+- 이벤트 처리 및 콜벡 처리와 같은 계산 작업에 사용한다.
+- I/O처리에서 사용하면 안된다.
+- 기본적으로 스레드의 수는 프로세서와 일치한다.
+
+```kotlin
+val observable = Observable.interval(100, TimeUnit.MILLISECONDS).take(3)
+observable
+    .subscribeOn(Schedulers.io())
+    .subscribe {
+    println("1. ${Thread.currentThread().name} is working, value is ${it}")
+}
+//결과
+//1. RxComputationThreadPool-1 is working, value is 0
+//1. RxComputationThreadPool-1 is working, value is 1
+//1. RxComputationThreadPool-1 is working, value is 2
+//1. RxComputationThreadPool-1 is working, value is 3
+//1. RxComputationThreadPool-1 is working, value is 4
+```
+
+- 메인스레드에서 생성하고 Schduler를 io로 지정해주었지만 ComputationThreadPool의 스레드를 사용하는 것을 확인할 수 있다.
+- 이는 `interval`, `timer`로 Obversable를 생성하면 scheduler가 자동적으로 computation으로 바뀐다.
+
+#### Schedulers.newThread
+
+- 작업마다 새로운 스레드를 생성한다.
+
+```kotlin
+val observable = Observable.just(1,2,3)
+observable
+    .subscribeOn(Schedulers.newThread())
+    .subscribe {
+    println("1. ${Thread.currentThread().name} is working, value is ${it}")
+}
+
+observable
+    .subscribeOn(Schedulers.newThread())
+    .subscribe {
+    println("2. ${Thread.currentThread().name} is working, value is ${it}")
+}
+//결과
+//1. RxNewThreadScheduler-1 is working, value is 1
+//1. RxNewThreadScheduler-1 is working, value is 2
+//1. RxNewThreadScheduler-1 is working, value is 3
+//2. RxNewThreadScheduler-2 is working, value is 1
+//2. RxNewThreadScheduler-2 is working, value is 2
+//2. RxNewThreadScheduler-2 is working, value is 3
+```
+
+- 메인스레드에서 호출했고 새롭게 스레드를 생성하여 각 작업을 비동기적으로 처리한다.
+
+#### Schedulers.single
+
+- singleThreadPool을 사용하고 해당 Scheduler로 여러 작업을 수행하면 Queuing되어 순서가 보장
+
+```kotlin
+val observable = Observable.just(1,2,3)
+observable
+    .subscribeOn(Schedulers.single())
+    .subscribe {
+    println("1. ${Thread.currentThread().name} is working, value is ${it}")
+}
+
+observable
+    .subscribeOn(Schedulers.single())
+    .subscribe {
+    println("2. ${Thread.currentThread().name} is working, value is ${it}")
+}
+//결과
+//1. RxSingleScheduler-1 is working, value is 1
+//1. RxSingleScheduler-1 is working, value is 2
+//1. RxSingleScheduler-1 is working, value is 3
+//2. RxSingleScheduler-1 is working, value is 1
+//2. RxSingleScheduler-1 is working, value is 2
+//2. RxSingleScheduler-1 is working, value is 3
+```
+
+- 메인스레드에서 호출했지만 SingleScheduler로써 순서가 보장되고 비동기처리가 가능해진다.
+
+#### Schedulers.trampoline
+
+- 호출한 스레드에서 작업을 수행하고 해당 스레드에서 다른 작업을 수행하면 Queuning되어 순서가 보장된다.
+
+```kotlin
+val observable = Observable.just(1,2,3)
+observable
+    .subscribeOn(Schedulers.trampoline())
+    .subscribe {
+    println("1. ${Thread.currentThread().name} is working, value is ${it}")    
+}
+observable
+    .subscribeOn(Schedulers.trampoline())
+    .subscribe {
+        println("2. ${Thread.currentThread().name} is working, value is ${it}")
+    }
+//결과
+//1. main is working, value is 1
+//1. main is working, value is 2
+//1. main is working, value is 3
+//2. main is working, value is 1
+//2. main is working, value is 2
+//2. main is working, value is 3
+```
+
+- 메인스레드에서 호출했기 때문에 스레드는 mainThread가 되고 순차적으로 처리된다.
+
+### Scheduler 지정
+
+- subscribeOn : 작업을 처리할 스레드 지정
+- observeOn : 작업결과를 처리할 스레드 지정
+
+#### SubscribeOn
+
+- 작업을 처리할 스레드를 지정하는 연산자이다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/subscribeOn.c.png"/></div>
+
+- observeOn 연산자를 사용하지 않는다면 선언 위치에 무관하게 Observable, Observer모두 subscribeOn에서 지정한 scheduler를 사용한다.
+
+#### ObserveOn
+
+- observe의 scheduler를 지정하는 연산자이다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/observeOn.c.png"/></div>
+
+
+
+- subscribeOn과 비슷하지만, Observable 객체에 지정된 scheduler에서 작동하도록 지정하고 해당 scheduler에 대한 관찰자에게 알려준다.
+
+#### subscribeOn과 observeOn의 우선순위
+
+- 기본적으로 Observable과 사용자가 지정한 연산자 체인의 작업을 수행하고 subscribe 메서드에 대해 관찰자에게 알린다.
+- SubscribeOn연산자는 Observable이 작동해야 하는 다른 Scheduler를 지정하여 작동 스레드를 변경한다.
+- observeOn연산자는 Observable가 observe에게 변경사항을 보내는데 다른 scheduler를사용하게끔 만들것이다.
+
+- 다음 이미지를 통해 subscribeOn과 observeOn의 우선순위에 대해 알수 있다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/schedulers.png"/></div>
+
+- SubscribeOn 연산자는 Observable가 어느 Thread에서 작동 시작할지를 지정한다.
+  - SubscribeOn연산자는 위치에 상관없이 Ovservable의 시작 스레드를 지정할 수 있다.
+- 반변에 ObserveOn은 Observable에서 사용된 시점아래 부터 지속적으로 스레드에 영향을 미친다.
+  - 첫번재 observeOn연산자가 수행된 이후 지속적으로 `주황색 Scheduler`를 사용되고 마지막에 `보라색 Scheduler`로 변형되었다.
+- 이러한 것을 통해 Observable에 연산자를 연속적으로 사용하는 과정에서 ObserveOn 연산자를 여러번 호출하여 특정 Thread가 특정 작업을 수행할 수 있도록 할 수 있다.
+
+> subscribeOn 연산자의 경우 여러번 호출가능하지만 가장 먼저 선언된 Scheduler를 사용하게 된다.
+
+## Debuging & Exception
+
+- Reactive Programming에서는 try-catch문을 사용할 수 없기 때문에 doOnXXX 연산자를 이용하여 처리해야 한다.
+
+#### doOnNext, doOnError, doOnComplete
+
+- doOn 연산자가 먼저 실행됨을 알 수 있다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/doOnNext.png"/></div>
+
+```kotlin
+Observable.just(0, 1, 2)
+    .doOnNext { println("doOnNext = $it") }
+    .doOnComplete { println("doOnComplete") }
+    .doOnError { println("doOnError") }
+    .subscribe({
+        println("onNext = $it")
+    }, {
+        println("onError = $it")
+    }, {
+        println("onComplete")
+    })
+//결과
+//doOnNext = 0
+//onNext = 0
+//doOnNext = 1
+//onNext = 1
+//doOnNext = 2
+//onNext = 2
+//doOnComplete
+//onComplete
+```
+
+```kotlin
+Observable.just(0, 1, 2)
+    .map { it % 0 }
+    .doOnNext { println("doOnNext = $it") }
+    .doOnComplete { println("doOnComplete") }
+    .doOnError { println("doOnError") }
+    .subscribe({
+        println("onNext = $it")
+    }, {
+        println("onError = $it")
+    }, {
+        println("onComplete")
+    })
+//결과
+//doOnError
+//onError = java.lang.ArithmeticException: / by zero
+```
+
+#### doOnSubscribe, doOnDispose
+
+- subscribe호출과 dispose 메서드를 사용시 처리될 로직을 수행할 수 있다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/doOnSubscribe.png"/></div>
+
+```kotlin
+val dispose = Observable.interval(100, TimeUnit.MILLISECONDS)
+    .doOnSubscribe { println("doOnSubscribe") }
+    .doOnDispose { println("doOnDispose") }
+    .subscribe({
+        println("onNext = $it")
+    }, {
+        println("onError = $it")
+    }, {
+        println("onComplete")
+    })
+Thread.sleep(500)
+dispose.dispose()
+//결과
+//doOnSubscribe
+//onNext = 0
+//onNext = 1
+//onNext = 2
+//onNext = 3
+//onNext = 4
+//doOnDispose
+```
+
+#### onErrorReturn
+
+- error가 발생했을때의 값을 다른 값으로 매핑하여 예외를 처리할 수 있다.
+
+<div><img src="http://reactivex.io/documentation/operators/images/onErrorReturn.png"/></div>
+
+```kotlin
+val list = mutableListOf("0", "1", "2","T3", "4")
+Observable.fromIterable(list)
+    .map{Integer.parseInt(it)}
+    .onErrorReturn {
+        println("error => $it")
+        return@onErrorReturn -1
+    }
+    .subscribe {
+        println("onNext = $it")
+    }
+//결과
+//onNext = 0
+//onNext = 1
+//onNext = 2
+//error => java.lang.NumberFormatException: For input string: "T3"
+//onNext = -1
+```
+
+- onErrorReturnItem을 이용하여 Throwable을 받지 않고 곧바로 값을 넘길 수 있다.
+
+#### Retry
+
+- Observable에서 오류를 발생한다면 오류가 발생되지 않을 때까지 다시 수행한다.
+- 일반적으로 네트워크 요청처리 실패시 사용될 수 있다.
+
+```kotlin
+val observable = Observable.range(0, 10)
+    .map {
+        if (it == 3) throw Exception("error")
+        else it
+    }
+observable.retry(2).subscribe({
+    println("onNext = $it")
+},{
+    println("onError = $it")
+})
+//결과
+//onNext = 0
+//onNext = 1
+//onNext = 2
+//onNext = 0
+//onNext = 1
+//onNext = 2
+//onNext = 0
+//onNext = 1
+//onNext = 2
+//onError = java.lang.Exception: error
+```
+
+## 정리
+
+- ReactiveX에는 크게 Observable, Operator, Subject, Scheduler로 나눌 수 있다.
+- 각 구성요소마다 사용되는 메서드 또한 다양하기에 ReactiveX의 러닝커브는 높다
+- 하지만 다른 비동기처리 라이브러리보다 람다식과 함수형 인터페이스를 통해 직관적인 흐름을 만들어 갈 수 있다.
+- 그외에도 여러 언어 특성에 맞게 구현되어 있다.
+
+> 참고 :
+>
+> [ReactiveX](http://reactivex.io/)
+>
+> ['Language/Rx' 카테고리의 글 목록 (tistory.com)](https://jaejong.tistory.com/category/Language/Rx)
+
