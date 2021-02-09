@@ -1,6 +1,6 @@
 ### ViewModel
 
-- viewModel은 activity나 fragment에 자료가 제한되는 것을 방지하고 UI관련 데이터를 수명 주기에 관계없이 보존할 수 있게 해준다.
+- viewModel은 activity나 fragment에 자료가 제한되는 것을 방지하고 UI관련 데이터를 UI의 수명 주기에 관계없이 보존할 수 있게 해준다.
 - 화면회전으로 activity, fragment를 재구성하게 될 경우 일반적으로 데이터는 초기화 되지만 사진과 같이 viewModel의 scope는 초기 activity가 `destroy`된 후에 `onCleared()`된다.
 
 <div>
@@ -13,8 +13,7 @@
 
 ### LiveData
 
-- 일반 클래스와 달리 수명 주기를 인식한다.
-- activity, fragment의 수명주기를 고려할 수 있다.
+- 일반 클래스와 달리 activity, fragment의 수명 주기를 인식한다.
 - 수명 주기를 인식하는 것은 `Observer`가 인식하여 데이터를 업데이터 한다.
 
 - `Observer` 클래스는 관찰자의 수명주기가 `STARTED`, `RESUMRED`상태이면 LiveData는 관찰자 활성상태로 간주한다.
@@ -45,6 +44,10 @@ val mDBMarkDataOne: LiveData<MarkerDataVO>
 ```
 
 ### Activity 생명주기
+
+<div>
+    <img src="https://developer.android.com/guide/components/images/activity_lifecycle.png?hl=ko"
+</div>
 
 - activity는 크게 3가지 상태로 나뉜다. resumed, paused, stopped
 - Resumed
@@ -121,12 +124,14 @@ val mDBMarkDataOne: LiveData<MarkerDataVO>
 
 ### Lambda function과 high order function
 
+- 
+
 ### MainThread, WorkerThread
 
 - 메인 스레드는 액티비티와 컴포넌트를 담당하고 연동하는 역할을 수행한다.
 - UI스레드라고 하며 UI처리에 대한 역할을 수행하는데요
 - 그렇기에 복잡한 작업, 네트워크, DB처리에 있어 UI스레드로 수행할 경우 화면이 멈추고 `ANR(Application Not Responding)`현상이 나타난다.
-- 이러한 형상은 사용자를 하여금 답답한다.
+- 이러한 현상은 사용자를 하여금 답답한다.
 - 그래서 위와 같은 연산은 비동기 스레드를 생성해서 해결한다.
 
 ### 4대 컴포넌트
@@ -169,7 +174,7 @@ val mDBMarkDataOne: LiveData<MarkerDataVO>
 - 명시적, 암시적 인텐트로 나뉠 수 있다.
 - 명시적 - 패키지명, 클래스명 등을 명시하여 실행하는 애플리케이션이 무엇인지 명시
 - 암시적 - 일반적인 작업만 작성하고 다른 앱이 해당 인텐트를 처리하게 된다.
-  - `anifest.xml`에 정의된 `Intent-Filter`가 이를 처리한다.
+  - `manifest.xml`에 정의된 `Intent-Filter`가 이를 처리한다.
 
 ### ReactiveX
 
@@ -178,7 +183,7 @@ val mDBMarkDataOne: LiveData<MarkerDataVO>
   - Retrofit에는 이를 다루기위해 Single 등에 여러 반환타입이 존재하는데 이를 리액티브 프로그래밍할 수 있다
   - 해당 작업을 수행하는 스레드를 `subscribeOn` 하고 해당 스레드로 부터 결과를 `ObserveOn`하는 스레드를 지정해 해당 결과를 `subscribe`하여 성공, 실패여부로 나누어  처리한다.
 
-### sharedPreferences에서 commit, apply차이
+### SharedPreferences에서 commit, apply차이
 
 - 서로 에디터에 작성된 결과를 반영시키는 메소드이다.
 - commit은 메인스레드를 사용한 동기처리방식
@@ -191,6 +196,19 @@ val mDBMarkDataOne: LiveData<MarkerDataVO>
 - 그렇기에 생성자에 들어갈 객체는 Bundle에 담아 setArgument함수를 호출하는게 일반적이다.
 - 그래서 newInstance로 fragment를 생성하는 이유도 이에 해당
 
+### 프래그먼트와 통신
+
+- 사용자 이벤트에의해 컨텐츠들이 변경될때 한 프래그먼트가 다른 프래그먼트에 통신하는 경우가 많다.
+- 프래그먼트간 모든 통신은 공유된 `ViewModel`이나 연결된 Activity를 통해서 실행되야 하고 직접 통신해서는 안된다.
+- 프래그먼트 간 통신하는 방법에는 구글에서는 크게 2가지로 정의하고 있다.
+- 하나는 공유된 `viewModel` 객체를 생성하는 것이다.
+  - 프래그먼트는 activity을 통해 ViewModel을 엑세스할 수 있다.
+  - 프래그먼트는 ViewModel 내 데이터를 업데이트할 수 있으며, 주로 LiveData를 통해 데이터를 변경하면 이를 관찰하는 다른 프래그먼트에 변경사항이 푸시된다.
+  - 결과적으로 activity는 아무런 처리없이 프래그먼트간 통신할 수 있게 된다.
+  - 또한 프래그먼트간 서로의 존재를 알 필요가 없어서 한 프래그먼트가 없어저도 문제가 되지 않는다.
+- 다른 하나는 인터페이스를 사용하여 통신 흐름을 수동으로 구현할 수 있다.
+- 하지만 구현하는데 많은 작업과 재사용성에 좋지않다.
+
 ### 안드로이드의 테스크란?
 
 - Task는 어플리케이션에서 실행되는 Activity를 관리하는 스택입니다. 
@@ -201,14 +219,12 @@ val mDBMarkDataOne: LiveData<MarkerDataVO>
 ### DI
 
 - 의존성 주입이다.
+
 - 의존성이란 함수에 필요한 클래스나 참조변수가 객체에 의존하는 것이다.
+
 - 내부에서 필요한 객체를 생성하고 참조하지만 외부에서 그러한 객체를 생성해서 주입시켜주는 것이 주입이다.
+
 - 그래서 개발자들이 객체를 생성하는 번거로움을 줄이고 클래스간 결합도를 낮추어 의존성을 낮춘다.
-
-#### Dagger와 Koin의 차이점
-
-- Dagger는 런타임 과정에서 에러가 발생하지 않는다.
-- Koin은 발생한다.
 
 
 ### MVC
@@ -225,15 +241,32 @@ val mDBMarkDataOne: LiveData<MarkerDataVO>
 ### MVP
 
 - MVC에서 나타난 view와 model간에 의존성을 최소화하기 위해 나온 개념이다.
-
 - 모델 - view, presenter등 다른 요소에 의존적이지 않은 데이터를 처리하는 역할을 수행
 - 뷰 - 사용자와 상호작용하는 인터페이스 역할을 하며 Activity, fragment가 해당 역할을 수행
   - Prensenter를 이용해 데이터를 주고받기 때문에 서로 의존적임
 - Presenter
   - view에 직접 연결되는 대신 인터페이스를 통해 상호작용한다는 점이 다름
   - 인터페이스로 작성되어있기 때문에 MVC가 가지는 모듈화, 테스트 문제를 해결할 수 있음
-
 - 하지만 애플리케이션 규모가 커질수록 View와 Presenter간에 의존성이 강해진다.
+
+### MVVM
+
+
+
+### manifest
+
+- 앱과 관련된 여러 정보가 담겨저 있다.
+- 앱 이름, 아이콘, 버전 등이 명시되어 있다.
+- 그 외에도 권한을 부여할 때 사용된다.
+- 4대 컴포넌트 등록 정보도 담겨저 있다.
+
+### kotlin의 장점
+
+- 보일러 플레이트 구문들이 많이 제거되기 때문에 생산성이 증대된다.
+- 람다식으로 간단한 표현이 가능하다.
+- NullPointerException을 다루는데 유리하다.
+- mutable, immutable 클래스 구분이 확실하다.
+- Scope funcitons으로 다양한 처리방식 제공
 
 
 
