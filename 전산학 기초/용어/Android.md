@@ -251,7 +251,14 @@ val mDBMarkDataOne: LiveData<MarkerDataVO>
 
 ### MVVM
 
-
+- MVVM은 model, view, viewModel로 구성된 패턴이다.
+- 최대한 기능적으로 작은 단위로 나누어 테스트와 유지보수에 유리한 구조를 만드는 것이 목적이다.
+- view - 모든 입력은 view로 전달되고 이를 viewModel에 전달해주는 역할을 수행한다.
+- viewModel 
+  - viewModel은 따로 view를 참조하지 않는다. (viewModel클래스에 android.*와 관련된 라이브러리가 존재하지 않음)
+  - view로부터 받은 입력을 통해 model을 업데이트한다.
+- model - 변경된 데이터를 viewModel을 이용하는 view에 업데이트하도록 한다.
+- mvp와 마찬가지로 view와 model간의 의존성이 없다.
 
 ### manifest
 
