@@ -230,3 +230,83 @@ fun main() {
 }
 ```
 
+### let을 이용한 null check
+
+#### 일반적인 null check
+
+- 코틀린에서는 auto-cast, scope functions을 이용하여 간편하게 코딩할 수 있다.
+- 하지만 각 특성을 잘 알고 사용하는 것이 중요하다.
+- 다음 코드는 null을 체크하여 null-safe하게 만든다.
+
+```kotlin
+fun printStr(str : String?){
+    str?.let { 
+        //처리될 내용
+    }
+}
+```
+
+- 이를 자바로 디컴파일하면 다음과 같이 나타난다.
+
+```java
+public static final void printStr(@Nullable String str) {
+   if (str != null) {
+      boolean var2 = false;
+      boolean var3 = false;
+      boolean var5 = false;
+   }
+}
+```
+
+- 불필요한 변수들이 선언된 것을 확인할 수 있다
+- 반면에 이제는 코틀린으로 if문을 통해 null체크를 한다.
+
+```kotlin
+fun printStr(str : String?) {
+    if (str != null) {
+        //처리될 내용
+    }
+}
+```
+
+- 이를 다시 디컴파일하면 다음과 같이 나타난다.
+
+```java
+public static final void printStr(@Nullable String str) {
+   if (str != null) {
+        //처리될 내용
+   }
+}                                                        
+```
+
+- 기존과는 다르게 다른 변수들이 선언되지 않는 것을 확인할 수 있다.
+- 이유는 메서드에 들어오는 매개변수의 타입은 `immutable val`형태가 된다.
+- 이를 let으로 체크하게 될 경우 위처럼 불필요한 변수들이 나타나게 된다.
+
+#### 전역변수 null check
+
+- 전역변수는 언제어디서든 값이 변경될 수 있는 타입이다.
+- 그렇기 때문에 일반적으로 if문으로 null 체크해도 내부에서 지속적으로 null체크를 다음과 같이 해줘야한다.
+
+```kotlin
+var str : String? = null
+
+fun printStr(){
+    if(str != null){
+        println(str?.length)	//다시 null체크
+    }
+}
+```
+
+- 이런 것은 let을 이용하여 not null로 변경해주는 것이 보다 좋다.
+
+```kotlin
+var str : String? = null
+
+fun printStr(){
+    str?.let {
+        println(it.length)
+    }
+}
+```
+
