@@ -108,9 +108,7 @@ abstract class BaseViewModel : ViewModel() {
 - `BaseViewModel`을 구현한 클래스에서 Rx를 이용하여 비동기 처리를 한다.
 - 이때 비동기 처리를 오퍼레이터 오버로딩으로 `CompositeDisposable` 에 추가하고 ViewModel이 제거될때 함게 clear시켜준다.
 
-> _error의 MediatorLiveData 타입 : [TIL/ViewModel + LiveData.md](https://github.com/vvvvvoin/TIL/blob/master/android/kotlin/ViewModel %2B LiveData.md#livedata-병합)
-
-#### ViewModel
+> _error의 MediatorLiveData 타입 : [TIL/ViewModel + LiveData.md](https://github.com/vvvvvoin/TIL/blob/master/android/kotlin/ViewModel%20%2B%20LiveData.md#livedata-%EB%B3%91%ED%95%A9)
 
 - `BaseViewModel`을 구현한 MyViewModel 클래스
 
@@ -240,7 +238,7 @@ class MyViewModel(
 }
 ```
 
-> Event 객체 : [TIL/Event Wrapper클래스로 ViewModel, LiveData 이슈 해결하기.md](https://github.com/vvvvvoin/TIL/blob/master/android/kotlin/Event Wrapper클래스로 ViewModel%2C LiveData 이슈 해결하기.md)
+> Event 객체 : [TIL/Event Wrapper클래스로 ViewModel, LiveData 이슈 해결하기.md](https://github.com/vvvvvoin/TIL/blob/master/android/kotlin/Event%20Wrapper%ED%81%B4%EB%9E%98%EC%8A%A4%EB%A1%9C%20ViewModel%2C%20LiveData%20%EC%9D%B4%EC%8A%88%20%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0.md)
 
 #### XML
 
