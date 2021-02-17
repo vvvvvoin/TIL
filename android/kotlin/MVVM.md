@@ -78,8 +78,10 @@ implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
 <uses-permission android:name="android.permission.INTERNET"/>
 ```
 
-## 본문
 
+
+## 본문
+> [vvvvvoin/MVVM-Template: MVVM-Template](https://github.com/vvvvvoin/MVVM-Template)을 기반으로 작성되었습니다.
 ### 사용자 인터페이스
 
 #### BaseViewModel
@@ -108,7 +110,9 @@ abstract class BaseViewModel : ViewModel() {
 - `BaseViewModel`을 구현한 클래스에서 Rx를 이용하여 비동기 처리를 한다.
 - 이때 비동기 처리를 오퍼레이터 오버로딩으로 `CompositeDisposable` 에 추가하고 ViewModel이 제거될때 함게 clear시켜준다.
 
-> _error의 MediatorLiveData 타입 : [TIL/ViewModel + LiveData.md](https://github.com/vvvvvoin/TIL/blob/master/android/kotlin/ViewModel%20%2B%20LiveData.md#livedata-%EB%B3%91%ED%95%A9)
+> _error의 MediatorLiveData 타입 : [TIL/ViewModel + LiveData.md](https://github.com/vvvvvoin/TIL/blob/master/android/kotlin/ViewModel %2B LiveData.md#livedata-병합)
+
+#### ViewModel
 
 - `BaseViewModel`을 구현한 MyViewModel 클래스
 
@@ -238,7 +242,7 @@ class MyViewModel(
 }
 ```
 
-> Event 객체 : [TIL/Event Wrapper클래스로 ViewModel, LiveData 이슈 해결하기.md](https://github.com/vvvvvoin/TIL/blob/master/android/kotlin/Event%20Wrapper%ED%81%B4%EB%9E%98%EC%8A%A4%EB%A1%9C%20ViewModel%2C%20LiveData%20%EC%9D%B4%EC%8A%88%20%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0.md)
+> Event 객체 : [TIL/Event Wrapper클래스로 ViewModel, LiveData 이슈 해결하기.md](https://github.com/vvvvvoin/TIL/blob/master/android/kotlin/Event Wrapper클래스로 ViewModel%2C LiveData 이슈 해결하기.md)
 
 #### XML
 
@@ -448,6 +452,15 @@ class PersonListAdapter : RecyclerView.Adapter<PersonListAdapter.ItemHolder>() {
 ```
 
 > 참조 : [vvvvvoin/MVVM-Template: MVVM-Template](https://github.com/vvvvvoin/MVVM-Template)
+
+## 결론
+
+- MVVM패턴을 구현하는데 많은 클래스가 사용되는 단점이 있지만 각 모듈간의 결합도를 줄이고 독립적으로 사용될 수 있는 큰 장점이 있다.
+- Repository를 이용하여 Remote, mDB와 관련된 로직을 나눌 수 있거나 Repository의 코드를 ViewModel에 한 번에 사용할 수 있다.
+- 혹은 각각의 기능을 Clean Architecture처럼 usecase로 만들어 세분화시킬 수 있다.
+- MVVM패턴을 만드는데도 여러 방법이 존재하고 이를 사용하는 목적과 프로젝트 규모에 맞게 사용하는 것이 중요하다.
+
+> 참고 : [vvvvvoin/MVVM-Template: MVVM-Template](https://github.com/vvvvvoin/MVVM-Template)
 
 ## 주의사항
 
