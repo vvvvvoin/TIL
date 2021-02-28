@@ -91,8 +91,11 @@ data class Sample(
 ```
 
 - sample클래스를 item이라는 name으로 textView의 text에 @{item.title}로 바인딩 시켜주어 뷰에 표시해줄 수 있도록 한다.
-
 - gradle과 레이아웃 세팅이 끝나면 안드로이드 스튜디오의 Build -> Rebuild Project를 클릭하여 바인딩 클래스를 생성해준다.
+
+> 각 위젯마다 id를 반드시 부여해야 해야 xml파일이 BataBinding로 변환할 때 사용된다.
+>
+> 또한 해당 파일은 .java파일로 작성되기 때문에 기존 자바의 예약어를 id로 사용할 수 없게 된다.
 
 ### activity, fragment
 

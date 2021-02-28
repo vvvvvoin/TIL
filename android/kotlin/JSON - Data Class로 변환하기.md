@@ -109,3 +109,7 @@ data class SearchData(
 
 - `meta`, `documents` data class를 동시애 내부에 정의할 수 있다.
 
+### NumberFormatException
+
+- 파싱하면서 `NumberFormatException`가 일반적으로 발생하는 이유는 data class에는 정수값으로 저장하고 JSON항목이 존재할때는 정수이지만 해당 항목에 값이 없을 때는 이를 내부적으로 Integer.pareseInt("")를 하기 때문에 Exception이 발생한다.
+  - data class의 값을 String타입으로 변환하면 해결됨
