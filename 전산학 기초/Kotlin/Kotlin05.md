@@ -23,7 +23,7 @@ T?.let { ... }
 fun <T, R> with(receiver: T, block: T.() -> R) : R
 ```
 
-- `with`는 일반 함수이기 때문에 객체 receive를 직업 입력받는다.
+- `with`는 일반 함수이기 때문에 객체 receive를 직접 입력받는다.
 - 객체를 사용하기 위해서는 두 번재 파라미터 블록을 받는다.
 - `T.()`를 람다 리시버라 하며, 입력을 받으면 함수내에서 `this`를 사용하지 않고도 입력받은 객체의 속성을 변경할 수 있다.
 
@@ -36,6 +36,38 @@ fun <T, R> T.run(block: T.() -> R) : R
 - `run`은 `with`처럼 인자로 람다 리시버를 받고, 반환 형태도 비슷하다.
 - 그러나 T의 확장함수라는 점에서 차이가 있다.
 - 어떤 값을 계산할 필요가 있거나 여러 개의 지역변수 범위를 제한할 때 사용한다.
+
+##### with vs run
+
+- 둘의 기능은 비슷하다.
+- 하지만 null을 체크하는데 있어서 약간에 차이가 존재한다.
+
+```kotlin
+data class Person(
+    var name : String?,
+    var age : Int
+){
+    constructor(age: Int) : this(null, age)
+}
+
+fun main() {
+    var person : Person = Person( 10)
+    with(person.name){
+        println(this?.length)
+    }
+}
+```
+
+- with를 사용하여 name을 접근하면 매번 `this`와 `?.`연산자를 통해 객체 property에 접근해야한다.
+- 반면 run을 사용하면 다음과 같이 사용할 수 있다.
+
+```kotlin
+person.name?.run {        
+    println(this.length) 
+}                        
+```
+
+- with다르게 receiver없이 null체크를 할 수 있다.
 
 #### apply
 
@@ -54,6 +86,8 @@ fun <T> T.also(block : (T) -> Unit) : T
 
 - `apply`와 유사하지만 블럭 함수의 입력으로 람다 리시버를 받지 않고 this로 받는다.
 - `apply`와 마찬가지로 T를 반환한다.
+
+<div><img src="https://user-images.githubusercontent.com/58923717/112807064-6f405e80-90b2-11eb-8f40-2086df6dccb4.jpg"></div>
 
 ### lateinit var? lazy?
 
