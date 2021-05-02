@@ -64,7 +64,11 @@
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 ```
 
+> 컨텐츠의 최상위 레이아웃에 app:layout_behavior="@string/appbar_scrolling_view_behavior" 하나만 줘도 작동한다.
+
 ### 주의사항
+
+#### recyclerView와 관련된
 
 - NestedScrollView와 RecyclerView를 같이 사용하면 RecyclerView를 스크롤하면 NestedScrollView가 스크롤되는 문제가 발생한다.
 - RecyclerView에 포커스가 맞춰지기 때문에 발생하는 문제이다.
@@ -77,3 +81,10 @@ android:descendantFocusability="blocksDescendants"
 - descendantFocusability : 해당 ViewGroup에 포커스를 하위뷰에 설정하는 속성
 - blocksDescendants : ViewGroup에 포커스를 받지 못하는 값
 
+#### 스크롤뷰와 관련된
+
+- 앱바를 제외한 컨텐츠들은 스크롤이 되는 레이아웃으로 묶을 수 있다.
+- 여기서 내부에 recycler뷰가 아니더라도 앱바의 collapsing이 동작하기 위해서는 nestedScroll로 사용해야한다.
+- scrollView를 사용하면 동작안함
+- swipeRefreshScrollView는 가능함
+- 커스텀 하기위해서 컨텐츠를 카드뷰 안에 넣고 카드뷰에 `app:layout_behavior="@string/appbar_scrolling_view_behavior"`를 사용할 수도 있다.
