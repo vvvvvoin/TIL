@@ -90,3 +90,50 @@ flowable.observeOn(Schedulers.computation())
 
 - 녹색(2)의 발생되는 데이터를 무시하게 되고 녹색(1)의 100ms이후 노란색(1)의 데이터가 처리되게 된다.
 
+## distinctUntilChanged
+
+- 해당 operator는 발행되는 값이 연속적을 다시 발행하는 것을 방지한다.
+- distinct와는 다르게 추후에 같은 같이 나와도 출력은 가능하지만 연속적인 값만을 핸들링한다.
+  - 즉, 중복이 발생한다
+  - distinct의 경우 모든 경우에 대해 처리해야 하므로 메모리 사용량이 distinctUntilChanged보다 높다.
+
+```kotlin
+Observable.just(1, 2, 3, 3, 2, 2, 1, 3)
+    .distinctUntilChanged()
+    .subscribeOn(Schedulers.io())
+    .subscribe {
+        print("${it} -> ")
+    }
+
+// 결과
+1 -> 2 -> 3 -> 2 -> 1 -> 3 -> 
+```
+
+- 객체같은 경우는 람다식에 연속적으로 나타나지 말아야할 값들을 지정해준다.
+
+```kotlin
+var a = Pserson(1, "james")
+var b = Pserson(2, "john")
+var c = Pserson(2, "merlin")
+var d = Pserson(3, "josh")
+var e = Pserson(4, "haily")
+
+Observable.just(a, b, c, d, e)
+    .distinctUntilChanged { t1, t2 -> t1.id == t2.id }
+    //.distinctUntilChanged { t1, t2 -> t1.id == t2.id && t1.name == t2.name}
+    .subscribeOn(Schedulers.io())
+    .subscribe {
+        println("${it} ")
+    }
+
+//결과
+Pserson(id=1, name=james) 
+Pserson(id=2, name=john) 
+Pserson(id=3, name=josh) 
+Pserson(id=4, name=haily) 
+```
+
+<div>
+  <img src="https://user-images.githubusercontent.com/58923717/121766525-60375b80-cb8d-11eb-82f8-7558338cbc5a.png"/
+</div>
+
