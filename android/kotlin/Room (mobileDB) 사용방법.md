@@ -296,3 +296,42 @@ GlobalScope.launch(Dispatchers.IO) {
 
 [https://medium.com/@gus0000123/mvvm-aac-room%EC%82%AC%EC%9A%A9%EB%B2%95-1-%EA%B0%9C%EB%85%90%ED%8E%B8-59ad680ea6fe](https://medium.com/@gus0000123/mvvm-aac-room%EC%82%AC%EC%9A%A9%EB%B2%95-1-%EA%B0%9C%EB%85%90%ED%8E%B8-59ad680ea6fe)
 
+
+
+## 추가
+
+### TypeConverter
+
+- 일반적으로 room 에서 entity에는 기본형(래퍼클래스)만을 취급한다.
+- list, 객체를 저장할려고 하면 에러가 발생한다.
+- 왜냐하면 성능과 메모리 상의 문제로 주 이유이다.
+- 하지만 typeConverter를 이용하여 이러한 부분들을 접근해볼 수 있다.
+- DB에 데이터를 저장하려고 할대 개발자가 원하는 타입(객체, 리스트, enum) 종류를 추가하고 싶다면 @TypeConverter를 사용하는 클래스를 만든다.
+
+```kotlin
+class DataConverters {
+	@TypeConverter
+	fun fromString(string: String): Date {
+        return Day.values().first {it.value == value}
+    }
+    
+	@TypeConverter
+	fun fromDay(day: Day): String? {
+        return Day.valueOf(day)
+    }    
+}
+```
+
+```kotlin
+enum class Day {
+    Sun, Mon, Tue, Wed, Thu, Fri, Sat,
+}
+```
+
+- 이후 이를 사용하는 DB에 @TypeConventers을 추가한다.
+
+```kotlin
+@TypeConverters(DataConverters::class)
+abstract fun Database: RoomDatabase() { ... }
+```
+
