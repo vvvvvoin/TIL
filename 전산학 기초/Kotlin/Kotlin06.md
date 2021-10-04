@@ -237,3 +237,20 @@ val number: Int = person.name
 
 - `String!`타입은 자바에서 온 타입이고 이런 타입은 코틀린에서 사용할 수 없고, 느낌표가 이런 오류 메시지의 근원과 관련이 있는 경우가 거의 없어 모를 수 도 있다.
 - `!`은 타입의 널 가능성에 대한 아무 정보도 없다는 것을 의미한다.
+
+## @CallSuper
+
+- `@CallSuper`은 하위 클래스에서 오버라이드할 때는 반드시 상위 클래스의 메서드를 호출하도록 강제한다.
+
+- 액티비티의 라이프사이클 메서드에도 사용된다.
+
+<img width="653" alt="스크린샷 2021-10-04 오후 5 17 10" src="https://user-images.githubusercontent.com/58923717/135817075-cb84673c-72ef-4874-8f89-ff647ab1a829.png">
+
+- 그렇기 때문에 activity의 `onCreate` 메서드 내부에는 반드시 `super.onCreate(saveInstanceState)`가 필요한 것이다.
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+  super.onCreate(savedInstanceState)
+}
+```
+
