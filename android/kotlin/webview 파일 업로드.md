@@ -138,13 +138,13 @@ val uploadType = getMimeTypesFromAcceptTypes(fileChooserParams?.acceptTypes)
 var imageIntent: Intent? = null                                             
 var videoIntent: Intent? = null                                             
                                                                             
-uploadType.forEach {                                                         
-    if (it.contains("jpg") && imageIntent != null) {                      
-        imageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)               
-    } else if (it.contains("mp4") && videoIntent != null) {               
-        videoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)               
-    }                                                                       
-}                                                                           
+uploadType.forEach {                                                                   
+    if ((it.contains("jpg") || it.contains("image/*")) && imageIntent == null) {      
+        imageIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)                         
+    } else if ((it.contains("mp4") || it.contains("video/*"))&& videoIntent == null) {
+        videoIntent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)                         
+    }                                                                                 
+}                                                                                                                                                               
 ```
 
 - 초기화된 인텐트로 부터 수행된 결과를 담을 파일을 지정해줄 수 있도록 한다.
@@ -153,7 +153,7 @@ uploadType.forEach {
 var imageFile: File? = null                                                               
 if (imageIntent?.resolveActivity(context.packageManager) != null) {                       
     try {                                                                                 
-        imageFile = createTempFile("jpg", context.cacheDir)                               
+        imageFile = createTempFile(".jpg", context.cacheDir)
     } catch (ex: Exception) {                                                             
     }                                                                                     
                                                                                           
@@ -166,7 +166,7 @@ if (imageIntent?.resolveActivity(context.packageManager) != null) {
 var videoFile: File? = null                                                               
 if (videoIntent?.resolveActivity(context.packageManager) != null) {                       
     try {                                                                                 
-        videoFile = createTempFile("mp4", context.cacheDir)                               
+        videoFile = createTempFile(".mp4", context.cacheDir)
     } catch (ex: Exception) {                                                             
     }                                                                                     
                                                                                           
@@ -230,7 +230,7 @@ override fun onShowFileChooser(
             filePathCallback,                                                   
             fileChooserParams                                                   
         ),                                                                      
-        999                                                                     
+        9999
     )                                                                           
                                                                                 
     return true
@@ -243,7 +243,7 @@ override fun onShowFileChooser(
 
 ```kotlin
 fun handleResult(requestCode: Int, resultCode: Int, data: Intent?) {      
-    if (requestCode == 999 && resultCode == AppCompatActivity.RESULT_OK) {
+    if (requestCode == 9999 && resultCode == AppCompatActivity.RESULT_OK) {
         val results = getResultUri(data)?.let { arrayOf(it) }             
         if (results != null) {                                            
             filePathCallback?.onReceiveValue(results)                     
