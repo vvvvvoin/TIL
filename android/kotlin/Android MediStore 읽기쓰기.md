@@ -92,3 +92,83 @@ id: 2830, display_name: 20150329_190719.jpg, date_taken: Thu Jan 01 09:00:00 GMT
 - 결과의 uri를 통해 view에 보여줄 수 있다.
 
 ## 쓰기
+
+- 미디어 데이터를 저장할 때는 MediaStore를 이용하기를 권장한다.
+
+- Android P 이하와 Q에서 MediaStore에 쓰기에 대해 알아본다.
+
+### 권한
+
+- MediaStore는 데이터를 쓰기는 읽기와 다르게 별도의 권한을 요구하지 않는다.
+
+### contentValue
+
+- 기본 사이즈를 갖는 빈 값, ContentValue를 생성하고 해당 값에 Media file에 대한 정보를 입력한다.
+
+```kotlin
+val values = ContentValues().apply {
+    put(MediaStore.Images.Media.DISPLAY_NAME, file_name)
+    put(MediaStore.Images.Media.MIME_TYPE, file_mime_type)
+    put(MediaStore.Images.Media.IS_PENDING, 1)
+}
+
+val collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+val uri: Uri = contentResolver.insert(collection, values)
+```
+
+- 읽기와 마찬가지로 MediStore 에 정의된 media타입에 맞는 값들을 지정해준다.
+
+- 이제 item: Uri에 파일을 쓰기할 수 있게 되었다.
+
+#### 저장 경로
+
+- 해당 파일을 insert하면 다음 `/sdcard/Pictures` 경로에 저장되게 된다.
+- 만약 다른 경로에 저장하고 싶다면 contentValues에 값을 추가하면 된다.
+
+```kotlin
+// pictures/myImage
+val path = Environment.DIRECTORY_PICTURES + File.separator + "myImage"
+
+val values = ContentValues().apply {
+  // anohther option
+  // write next code
+  put(MediaStore.Images.Media.RELATIVE_PATH, path)
+}
+```
+
+#### IS_PENDING?
+
+- 앱이 미디어 파일에 쓰기 작업을 하는 것과 같이 시간이 많이 소요될 수 있는 작업을 실행한다면 작업을 처리하는 동안 파일에 독점적으로 액세스하는 것이 유용합니다.
+- 미디어 파일을 쓰기 작업하는데 다소 시간이 소유된다면 해당 파일을 처리하는 앱에서만 접근하여 사용하는 것이 유용하다.
+- 그래서 contentValue에 `IS_PENDING` 값을 1로 설정하여 해당 앱에서만 처리할 권한을 얻는다.
+
+### Write
+
+- uri로 fileDescriptor를 얻고 이를 이용하여 파일을 쓰기해준다.
+- 웹에서 받은 `Okhhp3.ResponseBody` 타입의 이미지인 경우 다음과 같이 파일을 저장할 수 있다.
+
+> android q에서는 write권한이 없기 때문에 절대경로 알 수 없다.
+
+```kotlin
+val body = api.getResposeBody()
+
+contentResolver.openFileDescriptor(uri, "w", null)?.also { pdf ->
+    val fos = FileOutputStream(pdf.fileDescriptor)
+    fos.write(body.bytes)
+    fos.close()
+    pdf.close()
+}
+```
+
+### Update
+
+- 쓰기 후 이제 해당 파일의 `IS_PENDING` 값을 0으로 설정하여 다른 앱에서 접근할 수 있도록 한다.
+
+```kotlin
+values.put(MediaStore.Images.Media.IS_PENDING, 0)
+contentResolver.update(uri, values, null, null)
+```
+
+
+
+.......
