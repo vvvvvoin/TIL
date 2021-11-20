@@ -32,7 +32,7 @@ internal class CloseableCoroutineScope(context: CoroutineContext) : Closeable, C
 ```
 
 - 리턴값은 `CloseableCoroutineScope`으로 `CoroutineScope`를 구현한 internal 클래스이다.
-- 또한 Cloasable 인터페이스를 구현하여 `cloase()`를 오버라이딩하여 coroutineContext를 cancel시켜주고 있다.
+- 또한 Cloasable 인터페이스를 구현하여 `close()`를 오버라이딩하여 coroutineContext를 cancel시켜주고 있다.
 - *viewModelScope*의 getter내부 코드에는 `setTagIfAbsent`메서드는 job_key로 ViewModel의 HashMap에 등록시킨다.
 
 ```java
