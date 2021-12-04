@@ -136,4 +136,14 @@ Pserson(id=4, name=haily)
 <div>
   <img src="https://user-images.githubusercontent.com/58923717/121766525-60375b80-cb8d-11eb-82f8-7558338cbc5a.png"/
 </div>
+## IgnoreElement
 
+- RX1에서는 반환값이 없다면 `void`를 반환시켰다.
+- 하지만 RX2에서는 이를 `competable` 반환하도록 권장하고 있고 이를 마이그레이션하고 voide대신 사용하기 위한 오퍼레이터가 ignoreElement 이다.
+
+## Processor
+
+- RX에서는 다양한 subject가 존재한다.
+- behavior, async, publish, replay subject가 존재하는데 이는 subject외에도 processor가 존재한다.
+- behaviorPrecessor, publishProcessor가 존재한다.
+- subject와 차이점이라면 backpressure를 지원하는 차이가 있고 이는 Flowable타입으로 활용될 수 있다.
