@@ -139,7 +139,7 @@ Pserson(id=4, name=haily)
 ## IgnoreElement
 
 - RX1에서는 반환값이 없다면 `void`를 반환시켰다.
-- 하지만 RX2에서는 이를 `competable` 반환하도록 권장하고 있고 이를 마이그레이션하고 voide대신 사용하기 위한 오퍼레이터가 ignoreElement 이다.
+- 하지만 RX2에서는 이를 `competable` 반환하도록 권장하고 있고 이를 마이그레이션하고 void대신 사용하기 위한 오퍼레이터가 ignoreElement 이다.
 
 ## Processor
 
@@ -147,3 +147,46 @@ Pserson(id=4, name=haily)
 - behavior, async, publish, replay subject가 존재하는데 이는 subject외에도 processor가 존재한다.
 - behaviorPrecessor, publishProcessor가 존재한다.
 - subject와 차이점이라면 backpressure를 지원하는 차이가 있고 이는 Flowable타입으로 활용될 수 있다.
+
+## 실수
+
+- Rx를 이용하면 비즈니스 로직을 간편하고 다양한 케이스에 대응하는 강력한 도구가 된다.
+- 하지만 오퍼레이커가 많고 잘 못 사용하면 어디서 문제가 되는지 찾기 어려울 것이다.
+- 다음은 실제 경험담을 통해 실수한 내용을 작성해본다.
+- 잘 못 작성한 코드는 다음과 같았다.
+
+```kotlin
+fun main() {
+    getInformationUseCase()
+        .subscribe(System.out::println)
+}
+
+fun getInformationUseCase(): Single<String> {
+    return Single.just("getMetaData")
+        .map { metaData ->
+            if (metaData.isNotEmpty()) {
+                Single.zip(
+                    Single.just("API call1"),
+                    Single.just("API call2"),
+                    ::Pair,
+                ).map { println(it.first) }
+            } else {
+                Single.just("API call2").map(System.out::println)
+            }
+        }
+        .ignoreElement()
+        .andThen(
+            Single.just("getInformation")
+        )
+}
+```
+
+- 초기에 metaData를 얻어서 해당 결과에 따라서 Single에 대한 발행값들이 찾이가 나고 이를 실행후 Completable로 변환 후 getInformation이라는 API를 호출했었다.
+- main함수를 실행하면 결과는 `getInformation`만 표시된다.
+- metaData를 이용하여 API call에 대한 발행값들은 표시가 되지 않았다.
+- 아래 이유를 보기전에 원인을 생각해보면 좋을거 같다.
+- 이유는 초기 metaData를 발행하고 이를 `map`한게 문제였다.
+- metaData로 Single스트림을 유지하고 해당 값을 다시 `Single<Single<String>>`으로 처리되었고 해당 API call 스트림이 실행한되는게 문제였다.
+- 이를 인지하지 못한 이유는 API call이후에 `ignoreElement`로 값을 무시해서 따로 어떤 타입인지 확인하지 못 했고 `map`안에서 당연하게 새로운 Observable을 만든게 실수였다.
+- `map` -> `flatMap`으로 변경하면 정상동작하게 된다.
+

@@ -335,3 +335,51 @@ enum class Day {
 abstract fun Database: RoomDatabase() { ... }
 ```
 
+### @Transaction
+
+- DAO 클래스 함수에 사용하는 어노테이션이다.
+- DAO 클래스에서 추상 메서드가 아닌 곳에서 사용하게 될 경우, DB 트랜잭션의 super 메서드를 실행한다.
+
+```kotlin
+@Dao
+abstract class SongDao {
+    @Insert
+    abstract fun insert(song: Song)
+    @Delete
+    abstract fun delete(song: Song)
+    @Transaction
+    fun insertAndDeleteInTransaction(newSong: Song, oldSong: Song) {
+        // Anything inside this method runs in a single transaction.
+        insert(newSong)
+        delete(oldSong)
+    }
+}
+```
+
+쿼리 메서드에서 사용하게 될 경우 하나의 트랜잭션으로 함수가 실행된다. `SELECT`같이 사용할 2가지에 메인 케이스가 있다.
+
+- 쿼리 결과가 꽤 크다면, 일관된 데이터를 넘겨서 하나의 트랙잭션에서 처리하는게 더 좋다. 반면에 쿼리 결과가 하나의 `CursorWindow`에 적합하지 않을 경우, Cusor가 변경되는 사이의 데이터베이스 변경으로 쿼리 결과가 손상될 수 있다. 
+
+  → 데이터가 클 경우 여러 쿼리가 여러 커서 처리로 무결성이 깨진 결과를 받을 수 있다.
+
+- 쿼리 결과가 `@Relation` 필드가 같이있는 POJO 클래스라면, 해당 필드들은 별도로 쿼리가 된다. 이런 쿼리들에서 일관된 결과를 받기 위해서는 하나의 트랜잭션으로 쿼리를 수행하고 싶어할 것이다.
+
+  → POJO 클래스에 `@Relation` 필드로 있는 것들을 하나의 결과로 받을 수 있다.
+
+```kotlin
+data class AlbumWithSongs : Album (
+    @Relation(parentColumn = "albumId", entityColumn = "songId")
+    val songs: List<Song>
+)
+
+@Dao
+public interface AlbumDao {
+    @Transaction
+    @Query("SELECT * FROM album")
+    fun loadAll(): List<AlbumWithSongs>
+}
+```
+
+쿼리가 비동적이라면 트랜잭션은 메서드 호출할 때가 아닌 쿼리가 실행될 때 처리될 것입니다.
+
+`Insert`, `Update`, `Delete`에 트랜잭션 어노테이션을 두는 것은 의미가 없습니다. 이미 내부적으로 하나의 트랜잭션으로 돌아가기 때문이다. 마찬가지로 쿼리 어노테이션이 있는 메서드에서 INSERT, UPDATE, DELETE 문의 쿼리일 경우도 자동적으로 트랜잭션으로 래핑된다. Room은 한 번에 최대 하나의 트랜잭션을 수행하고, 추가 트랜잭션은 대기하고 순차적으로 실행된다.
