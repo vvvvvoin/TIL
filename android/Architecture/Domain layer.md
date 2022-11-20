@@ -1,6 +1,6 @@
 # Doamin layer
 
-Domain 계층은 아래와 같이 UI, Data 계층 사이에 존재한다. Domain 계층은 구글에서 제시하는 아키텍처 가이드에서는 선택 사항이다.
+Domain 계층은 아래와 같이 UI, Data 계층 사이에 존재한다. Domain 계층은 구글에서 제시하는 아키텍처 가이드에서는 비즈니스 로직의 재사용성과 간략화가 필요할 수 있는 규모가 큰 프로젝트에 사용하는 것을 추천하고 있습니다.
 
 <img src="https://developer.android.com/static/topic/libraries/architecture/images/mad-arch-domain-overview.png" />
 
