@@ -103,8 +103,8 @@ private class StartedLazily : SharingStarted {
 
 - SharingStarted.WhileSubscribed - 구독이 없으질 경우 파라미터에 따라 중지됩니다.
 
-  - stopTimeoutMillis 구독이 없어지고 얼마나 기다리고 정지할지 값을 지정합니다.
-  - replayExpriationMilis 구독이 없어지고 얼마나 기다리고 저장된 값을 제거할지 지정합니다. StateIn 같은 경우 initialValue가 지정되고 ShareIn은 값이 제거됩니다.
+  - stopTimeoutMillis : 구독이 없어지고 얼마나 기다리고 정지할지 값을 지정합니다.
+  - replayExpriationMilis : stopTimeoutMillis 이후 얼마나 기다리고 저장된 값을 제거할지 지정합니다. StateIn 같은 경우 initialValue가 지정되고 ShareIn은 값이 제거됩니다.
 
 ```kotlin
 private class StartedWhileSubscribed(
