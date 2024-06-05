@@ -49,17 +49,9 @@ jobs:
           # Create a new feature branch for the changes.
           git checkout -b $BRANCH_NAME
           
-          cd $home
-          
-          echo "home"
+          cd ..
+          echo "back"
           ls
-          
-          cd work
-          
-          
-          echo "work"
-          ls
-        
 
 #          # Update the script files to the latest version.
 #          cp -R ../../../scripts scripts
