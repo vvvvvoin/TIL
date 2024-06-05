@@ -1,0 +1,75 @@
+name: publish_to_bezier_compose
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+      - 'master'
+      - 'exp'
+
+jobs:
+  publish_to_bezier_compose:
+    name: publish_to_bezier_compose
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: install python3
+        uses: actions/setup-python@v2
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pathlib svg.path
+
+      - name: Send pull-request
+        run: |
+          LATEST_TAG=$(git describe --tags --always --abbrev=0)
+          REPOSITORY="channel-io/bezier-compose"
+          FOLDER="bin/$REPOSITORY"
+          BRANCH_NAME="update-bezier-icon-$LATEST_TAG"
+
+          # Clone the remote repository and change working directory to the
+          # folder it was cloned to.
+          git clone \
+            --depth=1 \
+            --branch=exp \
+            https://github.com/$REPOSITORY \
+            $FOLDER
+
+          cd $FOLDER
+
+          # Setup the committers identity.
+          git config user.email "bezier-asset@channel.io"
+          git config user.name "bezier-asset"
+
+          # Create a new feature branch for the changes.
+          git checkout -b $BRANCH_NAME
+          
+          cd $home
+          
+          ls
+
+#          # Update the script files to the latest version.
+#          cp -R ../../../scripts scripts
+
+#          # Commit the changes and push the feature branch to origin
+#          git add .
+#          git commit -m "Update bezier icon $LATEST_TAG"
+#          git push origin $BRANCH_NAME
+#
+#          # Store the PAT in a file that can be accessed by the
+#          # GitHub CLI.
+#          echo "${{ secrets.ACCESS_TOKEN }}" > token.txt
+#
+#          # Authorize GitHub CLI for the current repository and
+#          # create a pull-requests containing the updates.
+#          gh auth login --with-token < token.txt
+#          gh pr create \
+#            --body "" \
+#            --title "Update bezier icon $LATEST_TAG" \
+#            --head "$BRANCH_NAME" \
+#            --base "main"
