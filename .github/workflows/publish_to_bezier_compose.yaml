@@ -36,7 +36,7 @@ jobs:
           # folder it was cloned to.
           git clone \
             --depth=1 \
-            --branch=exp \
+            --branch=develop \
             https://github.com/$REPOSITORY \
             $FOLDER
 
