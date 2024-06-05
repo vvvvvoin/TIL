@@ -51,7 +51,15 @@ jobs:
           
           cd $home
           
+          echo "home"
           ls
+          
+          cd work
+          
+          
+          echo "work"
+          ls
+        
 
 #          # Update the script files to the latest version.
 #          cp -R ../../../scripts scripts
