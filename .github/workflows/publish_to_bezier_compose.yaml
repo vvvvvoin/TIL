@@ -55,6 +55,12 @@ jobs:
           echo "back2"
           cd ..
           ls
+          echo "back3"
+          cd ..
+          ls
+          echo "back4"
+          cd ..
+          ls
           
 
 #          # Update the script files to the latest version.
